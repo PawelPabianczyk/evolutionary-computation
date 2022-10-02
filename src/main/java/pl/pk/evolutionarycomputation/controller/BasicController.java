@@ -20,7 +20,7 @@ public class BasicController {
     public String sendFormData(@ModelAttribute("algConf") GeneticAlgorithmConfiguration configuration) {
         System.out.println(configuration.isMaximization());
         System.out.println(configuration.getCrossMethod());
-        return "index";
+        return "redirect:/results";
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
