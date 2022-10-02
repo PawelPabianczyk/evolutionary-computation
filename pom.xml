@@ -14,14 +14,13 @@
 	<artifactId>evolutionary-computation</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>evolutionary-computation</name>
-	<description>Demo project for Spring Boot</description>
 
 	<properties>
 		<java.version>17</java.version>
 		<com.h2database.version>2.1.214</com.h2database.version>
 		<org.projectlombok.version>1.18.24</org.projectlombok.version>
+		<com.google.guava.version>31.1-jre</com.google.guava.version>
 	</properties>
-
 
 	<dependencies>
 		<dependency>
@@ -49,6 +48,12 @@
 			<version>${org.projectlombok.version}</version>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${com.google.guava.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
