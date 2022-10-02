@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://thymeleaf.org/">
 <head>
     <meta charset="UTF-8">
     <title>Main</title>
@@ -18,79 +18,94 @@
 <body>
 <div class="container w-50 h-100 m-auto align-items-center">
     <h1 class="m-5">Genetic Algorithm for ...</h1>
+    <hr class="border-primary">
     <div class="row">
         <div class="col">
-            <form class="align-items-center">
-                <div class="form-group row w-50">
-                    <div class="col-sm-10">
-                        <input id="start-range" type="text" class="form-control" placeholder="Begin of the range - a">
+            <form class="align-items-center"
+                  th:action="@{/index}"
+                  th:object="${algConf}"
+                  method="post">
+                <div class="form-group row">
+                    <div class="col-sm-10 d-flex w-100 justify-content-around">
+                        <label for="start-range" class="w-50">Begin of the range - a: </label>
+                        <input th:field="*{rangeBegin}" id="start-range" type="number" class="form-control w-25"
+                               placeholder="Begin of the range - a">
                     </div>
                 </div>
-                <div class="form-group row w-50">
-                    <div class="col-sm-10">
-                        <input id="end-range" type="text" class="form-control" placeholder="End of the range - b">
+                <div class="form-group row">
+                    <div class="col-sm-10 d-flex w-100 justify-content-around">
+                        <label for="end-range" class="w-50">End of the range - b: </label>
+                        <input th:field="*{rangeEnd}" id="end-range" type="number" class="form-control w-25" placeholder="End of the range - b">
                     </div>
                 </div>
-                <div class="form-group row w-50">
-                    <div class="col-sm-10">
-                        <input id="population" type="text" class="form-control" placeholder="Population amount">
+                <div class="form-group row">
+                    <div class="col-sm-10 d-flex w-100 justify-content-around">
+                        <label for="population" class="w-50">Population amount: </label>
+                        <input th:field="*{populationAmount}" id="population" type="number" class="form-control w-25" placeholder="Population amount">
                     </div>
                 </div>
-                <div class="form-group row w-50">
-                    <div class="col-sm-10">
-                        <input id="epochs" type="text" class="form-control" placeholder="Epochs amount">
+                <div class="form-group row">
+                    <div class="col-sm-10 d-flex w-100 justify-content-around">
+                        <label for="epochs" class="w-50">Epochs amount: </label>
+                        <input th:field="*{epochsAmount}" id="epochs" type="number" class="form-control w-25" placeholder="Epochs amount">
                     </div>
                 </div>
-                <div class="form-group row w-75">
-                    <div class="col-sm-10">
-                        <input id="chromosome" type="text" class="form-control"
+                <div class="form-group row">
+                    <div class="col-sm-10 d-flex w-100 justify-content-around">
+                        <label for="chromosome" class="w-50">Best and tournament chromosome amount: </label>
+                        <input th:field="*{chromosomeAmount}" id="chromosome" type="number" class="form-control w-25"
                                placeholder="Best and tournament chromosome amount">
                     </div>
                 </div>
-                <div class="form-group row w-50">
-                    <div class="col-sm-10">
-                        <input id="elite-amount" type="text" class="form-control" placeholder="Elite Strategy amount">
+                <div class="form-group row">
+                    <div class="col-sm-10 d-flex w-100 justify-content-around">
+                        <label for="elite-amount" class="w-50">Elite Strategy amount: </label>
+                        <input th:field="*{eliteStrategyAmount}" id="elite-amount" type="number" class="form-control w-25" placeholder="Elite Strategy amount">
                     </div>
                 </div>
-                <div class="form-group row w-50">
-                    <div class="col-sm-10">
-                        <input id="cross-probability" type="text" class="form-control" placeholder="Cross probability">
+                <div class="form-group row">
+                    <div class="col-sm-10 d-flex w-100 justify-content-around">
+                        <label for="cross-probability" class="w-50">Cross probability: </label>
+                        <input th:field="*{crossProbability}" id="cross-probability" type="number" class="form-control w-25" placeholder="Cross probability">
                     </div>
                 </div>
-                <div class="form-group row w-50">
-                    <div class="col-sm-10">
-                        <input id="mutation-probability" type="text" class="form-control"
+                <div class="form-group row">
+                    <div class="col-sm-10 d-flex w-100 justify-content-around">
+                        <label for="mutation-probability" class="w-50">Mutation probability: </label>
+                        <input th:field="*{mutationProbability}" id="mutation-probability" type="number" class="form-control w-25"
                                placeholder="Mutation probability">
                     </div>
                 </div>
-                <div class="form-group row w-50">
-                    <div class="col-sm-10">
-                        <input id="inversion-probability" type="text" class="form-control"
+                <div class="form-group row">
+                    <div class="col-sm-10 d-flex w-100 justify-content-around">
+                        <label for="inversion-probability" class="w-50">Inversion probability: </label>
+                        <input th:field="*{inversionProbability}" id="inversion-probability" type="number" class="form-control w-25"
                                placeholder="Inversion probability">
                     </div>
                 </div>
-
-                <fieldset class="form-group">
+                <hr class="border-primary">
+                <div class="row d-flex justify-content-center">
+                <fieldset class="form-group  border-right border-primary m-2">
                     <div class="row mb-3">
-                        <legend class="col-form-label col-sm-2 pt-0">Selection Method</legend>
-                        <div class="col-sm-10">
+                        <legend class="col-form-label col-sm-4"><b>Selection Method</b></legend>
+                        <div class="col-sm-8">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="selection" id="best"
-                                       value="option1" checked>
+                                <input th:field="*{selectionMethod}" class="form-check-input" type="radio" name="selection" id="best"
+                                       value="best" checked>
                                 <label class="form-check-label" for="best">
                                     Best
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="selection" id="roulette"
-                                       value="option2">
+                                <input th:field="*{selectionMethod}" class="form-check-input" type="radio" name="selection" id="roulette"
+                                       value="roulette">
                                 <label class="form-check-label" for="roulette">
                                     Roulette
                                 </label>
                             </div>
-                            <div class="form-check disabled">
-                                <input class="form-check-input" type="radio" name="selection" id="tournament"
-                                       value="option3">
+                            <div class="form-check">
+                                <input th:field="*{selectionMethod}" class="form-check-input" type="radio" name="selection" id="tournament"
+                                       value="tournament">
                                 <label class="form-check-label" for="tournament">
                                     Tournament
                                 </label>
@@ -98,34 +113,34 @@
                         </div>
                     </div>
                 </fieldset>
-                <fieldset class="form-group">
+                <fieldset class="form-group border-right border-primary m-2">
                     <div class="row mb-3">
-                        <legend class="col-form-label col-sm-2 pt-0">Cross Method</legend>
-                        <div class="col-sm-10">
+                        <legend class="col-form-label col-sm-4"><b>Cross Method</b></legend>
+                        <div class="col-sm-8">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="cross" id="cross-one"
-                                       value="option1" checked>
+                                <input th:field="*{crossMethod}" class="form-check-input" type="radio" name="cross" id="cross-one"
+                                       value="cross-one" checked>
                                 <label class="form-check-label" for="cross-one">
                                     One Point
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="cross" id="cross-two"
-                                       value="option2">
+                                <input th:field="*{crossMethod}" class="form-check-input" type="radio" name="cross" id="cross-two"
+                                       value="cross-two">
                                 <label class="form-check-label" for="cross-two">
                                     Two Points
                                 </label>
                             </div>
-                            <div class="form-check disabled">
-                                <input class="form-check-input" type="radio" name="cross" id="cross-three"
-                                       value="option3">
+                            <div class="form-check">
+                                <input th:field="*{crossMethod}" class="form-check-input" type="radio" name="cross" id="cross-three"
+                                       value="cross-three">
                                 <label class="form-check-label" for="cross-three">
                                     Three Points
                                 </label>
                             </div>
-                            <div class="form-check disabled">
-                                <input class="form-check-input" type="radio" name="gridRadios1" id="cross-homo"
-                                       value="option3">
+                            <div class="form-check">
+                                <input th:field="*{crossMethod}" class="form-check-input" type="radio" name="gridRadios1" id="cross-homo"
+                                       value="cross-homo">
                                 <label class="form-check-label" for="cross-homo">
                                     Homo
                                 </label>
@@ -133,20 +148,20 @@
                         </div>
                     </div>
                 </fieldset>
-                <fieldset class="form-group">
+                <fieldset class="form-group m-2">
                     <div class="row mb-3">
-                        <legend class="col-form-label col-sm-2 pt-0">Mutation Method</legend>
-                        <div class="col-sm-10">
+                        <legend class="col-form-label col-sm-4"><b>Mutation Method</b></legend>
+                        <div class="col-sm-8">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="mutation" id="mutation-one"
-                                       value="option1" checked>
+                                <input th:field="*{mutationMethod}" class="form-check-input" type="radio" name="mutation" id="mutation-one"
+                                       value="mutation-one">
                                 <label class="form-check-label" for="mutation-one">
                                     One Point
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="mutation" id="mutation-two"
-                                       value="option2">
+                                <input th:field="*{mutationMethod}" class="form-check-input" type="radio" name="mutation" id="mutation-two"
+                                       value="mutation-two" checked>
                                 <label class="form-check-label" for="mutation-two">
                                     Two Points
                                 </label>
@@ -154,10 +169,12 @@
                         </div>
                     </div>
                 </fieldset>
+                </div>
+                <hr class="border-primary">
                 <div class="form-group row">
                     <div class="col-sm-10">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="maximization">
+                            <input th:field="*{maximization}" class="form-check-input" type="checkbox" id="maximization">
                             <label class="form-check-label" for="maximization">
                                 Maximization
                             </label>

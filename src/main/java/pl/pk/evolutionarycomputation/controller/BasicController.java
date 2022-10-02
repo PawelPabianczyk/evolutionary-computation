@@ -12,12 +12,14 @@ public class BasicController {
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index(Model model) {
-        model.addAttribute("userConf", new GeneticAlgorithmConfiguration());
+        model.addAttribute("algConf", new GeneticAlgorithmConfiguration());
         return "index";
     }
 
     @RequestMapping(value = "/index", method = RequestMethod.POST)
-    public String sendFormData(@ModelAttribute Model model) {
+    public String sendFormData(@ModelAttribute("algConf") GeneticAlgorithmConfiguration configuration) {
+        System.out.println(configuration.isMaximization());
+        System.out.println(configuration.getCrossMethod());
         return "index";
     }
 

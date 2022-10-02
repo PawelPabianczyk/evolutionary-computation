@@ -11,17 +11,17 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GeneticAlgorithmConfiguration {
     //TODO - add default values
-    private double rangeBegin;
-    private double rangeEnd;
-    private int populationAmount;
-    private int epochsAmount;
-    private int chromosomeAmount;
-    private int eliteStrategyAmount;
-    private double crossProbability;
-    private double mutationProbability;
-    private double inversionProbability;
-    private String selectionMethod;
-    private String crossMethod;
-    private String mutationMethod;
-    private boolean maximization;
+    private double rangeBegin = 3.0;
+    private double rangeEnd = 5.0;
+    private int populationAmount = 1000;
+    private int epochsAmount = 20;
+    private int chromosomeAmount = 10;
+    private int eliteStrategyAmount = 12;
+    private double crossProbability = 0.3;
+    private double mutationProbability = 0.6;
+    private double inversionProbability = 0.2;
+    private String selectionMethod = "best";
+    private String crossMethod = "cross-one";
+    private String mutationMethod = "mutation-two";
+    private boolean maximization = true;
 }
