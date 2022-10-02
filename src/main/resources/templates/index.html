@@ -3,8 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <title>Main</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
 </head>
 <body>
+<div class="container w-50 h-100 m-auto align-items-center">
+    <h1 class="m-5">Genetic Algorithm for ...</h1>
+    <div class="row">
+        <div class="col">
+            <form class="align-items-center">
+                <div class="form-group row w-50">
+                    <div class="col-sm-10">
+                        <input id="start-range" type="text" class="form-control" placeholder="Begin of the range - a">
+                    </div>
+                </div>
+                <div class="form-group row w-50">
+                    <div class="col-sm-10">
+                        <input id="end-range" type="text" class="form-control" placeholder="End of the range - b">
+                    </div>
+                </div>
+                <div class="form-group row w-50">
+                    <div class="col-sm-10">
+                        <input id="population" type="text" class="form-control" placeholder="Population amount">
+                    </div>
+                </div>
+                <div class="form-group row w-50">
+                    <div class="col-sm-10">
+                        <input id="epochs" type="text" class="form-control" placeholder="Epochs amount">
+                    </div>
+                </div>
+                <div class="form-group row w-75">
+                    <div class="col-sm-10">
+                        <input id="chromosome" type="text" class="form-control" placeholder="Best and tournament chromosome amount">
+                    </div>
+                </div>
+                <div class="form-group row w-50">
+                    <div class="col-sm-10">
+                        <input id="elite-amount" type="text" class="form-control"  placeholder="Elite Strategy amount">
+                    </div>
+                </div>
+                <div class="form-group row w-50">
+                    <div class="col-sm-10">
+                        <input id="cross-probability" type="text" class="form-control" placeholder="Cross probability">
+                    </div>
+                </div>
+                <div class="form-group row w-50">
+                    <div class="col-sm-10">
+                        <input id="mutation-probability" type="text" class="form-control" placeholder="Mutation probability">
+                    </div>
+                </div>
+                <div class="form-group row w-50">
+                    <div class="col-sm-10">
+                        <input id="inversion-probability" type="text" class="form-control" placeholder="Inversion probability">
+                    </div>
+                </div>
 
+                <fieldset class="form-group">
+                    <div class="row mb-3">
+                        <legend class="col-form-label col-sm-2 pt-0">Selection Method</legend>
+                        <div class="col-sm-10">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="selection" id="best"
+                                       value="option1" checked>
+                                <label class="form-check-label" for="best">
+                                    Best
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="selection" id="roulette"
+                                       value="option2">
+                                <label class="form-check-label" for="roulette">
+                                    Roulette
+                                </label>
+                            </div>
+                            <div class="form-check disabled">
+                                <input class="form-check-input" type="radio" name="selection" id="tournament"
+                                       value="option3">
+                                <label class="form-check-label" for="tournament">
+                                    Tournament
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                    <fieldset class="form-group">
+                    <div class="row mb-3">
+                        <legend class="col-form-label col-sm-2 pt-0">Cross Method</legend>
+                        <div class="col-sm-10">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="cross" id="cross-one"
+                                       value="option1" checked>
+                                <label class="form-check-label" for="cross-one">
+                                    One Point
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="cross" id="cross-two"
+                                       value="option2">
+                                <label class="form-check-label" for="cross-two">
+                                    Two Points
+                                </label>
+                            </div>
+                            <div class="form-check disabled">
+                                <input class="form-check-input" type="radio" name="cross" id="cross-three"
+                                       value="option3">
+                                <label class="form-check-label" for="cross-three">
+                                    Three Points
+                                </label>
+                            </div>
+                            <div class="form-check disabled">
+                                <input class="form-check-input" type="radio" name="gridRadios1" id="cross-homo"
+                                       value="option3">
+                                <label class="form-check-label" for="cross-homo">
+                                    Homo
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    </fieldset>
+                    <fieldset class="form-group">
+                    <div class="row mb-3">
+                        <legend class="col-form-label col-sm-2 pt-0">Mutation Method</legend>
+                        <div class="col-sm-10">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="mutation" id="mutation-one"
+                                       value="option1" checked>
+                                <label class="form-check-label" for="mutation-one">
+                                    One Point
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="mutation" id="mutation-two"
+                                       value="option2">
+                                <label class="form-check-label" for="mutation-two">
+                                    Two Points
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="maximization">
+                            <label class="form-check-label" for="maximization">
+                                Maximization
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary">Start</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>
