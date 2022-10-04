@@ -29,7 +29,7 @@ public class BasicController {
     }
 
     @RequestMapping(value = "/results", method = RequestMethod.GET)
-    public String results() {
+    public String results(Model model) {
         return "/results";
     }
 }
