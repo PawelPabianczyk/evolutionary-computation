@@ -25,7 +25,13 @@
             <h5 style="color: cornflowerblue;">4.323 ms</h5>
         </div>
     </div>
-
+    <script th:inline="javascript">
+        let generation = "[[${generation}]]";
+        generation = generation.replaceAll('[', '').replaceAll(']', '').split(',');
+        let value = "[[${value}]]";
+        value = value.replaceAll('[', '').replaceAll(']', '').split(',');
+        let linearChart = "[[${linearChart}]]" === 'true';
+    </script>
     <script type="text/javascript" th:src="@{/js/script.js}"></script>
 </body>
 </html>

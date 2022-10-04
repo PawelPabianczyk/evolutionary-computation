@@ -1,43 +1,67 @@
-const TESTER = document.getElementById('chart');
+let data;
+let layout;
+const container = document.getElementById('chart');
 
-let data =  [{
-    x: [1, 2, 3, 4, 5],
-    y: [1, 2, 4, 8, 16]
-}];
+if (linearChart) {
+    data = [{
+        x: generation,
+        y: value
+    }];
 
-let layout = {
-    title: {
-        text:'This is a title of the chart',
-        font: {
-            family: 'Courier New, monospace',
-            size: 24
-        },
-        xref: 'paper',
-        x: 0.05,
-    },
-    xaxis: {
+    layout = {
         title: {
-            text: 'X Axis',
+            text: 'This is a title of the chart',
             font: {
                 family: 'Courier New, monospace',
-                size: 25,
-                color: '#7f7f7f'
-            }
+                size: 24
+            },
+            xref: 'paper',
+            x: 0.05,
         },
-    },
-    yaxis: {
-        title: {
-            text: 'y Axis',
-            font: {
-                family: 'Courier New, monospace',
-                size: 25,
-                color: '#7f7f7f'
+        xaxis: {
+            title: {
+                text: 'Generation',
+                font: {
+                    family: 'Courier New, monospace',
+                    size: 25,
+                    color: '#7f7f7f'
+                }
+            },
+        },
+        yaxis: {
+            title: {
+                text: 'Value',
+                font: {
+                    family: 'Courier New, monospace',
+                    size: 25,
+                    color: '#7f7f7f'
+                }
             }
         }
+    };
+
+    Plotly.plot(container, data, layout, {showSendToCloud: true});
+} else {
+    data = [{
+        type: "pie",
+        values: value,
+        labels: ["Wages", "Operating expenses", "Cost of sales", "Insurance"],
+        textinfo: "label",
+        insidetextorientation: "radial"
+    }]
+
+    layout = {
+        title: {
+            text: 'This is a title of the chart',
+            font: {
+                family: 'Courier New, monospace',
+                size: 24
+            },
+            xref: 'paper',
+            x: 0.05,
+        }
     }
-};
-
-Plotly.plot( TESTER, data, layout, {showSendToCloud:true} );
 
 
-console.log( Plotly.BUILD );
+    Plotly.newPlot(container, data, layout);
+}

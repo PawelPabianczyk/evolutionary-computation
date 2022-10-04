@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import pl.pk.evolutionarycomputation.model.GeneticAlgorithmConfiguration;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
 public class BasicController {
 
@@ -30,6 +33,11 @@ public class BasicController {
 
     @RequestMapping(value = "/results", method = RequestMethod.GET)
     public String results(Model model) {
+        int[] generation = {1, 2, 3, 4, 5, 4, 67, 3};
+        double[] value = {1, 2, 4, 8, 16, 1, 5, 7};
+        model.addAttribute("generation", generation);
+        model.addAttribute("value", value);
+        model.addAttribute("linearChart", true);
         return "/results";
     }
 }
