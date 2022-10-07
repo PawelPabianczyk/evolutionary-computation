@@ -11,8 +11,11 @@ import java.util.stream.DoubleStream;
 public class ChromosomeGenerator {
 
     public List<Chromosome> generateListOfChromosomes(int numberOfElements, int minimumValue, int maximumValue) {
-        return DoubleStream.generate(ThreadLocalRandom.current()::nextDouble)
-                .filter(value -> minimumValue <= value && value <= maximumValue)
+        return DoubleStream.generate(() -> {
+                    return ThreadLocalRandom
+                                .current()
+                                .nextDouble() * (maximumValue - minimumValue) + minimumValue;
+                })
                 .distinct()
                 .limit(numberOfElements)
                 .mapToObj(Chromosome::new)

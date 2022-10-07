@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface ISelection {
-    List<FunctionResult> bestElementsMethod(List<FunctionResult> functionResults, Long percentageOfBestElements);
+    List<FunctionResult> bestElementsMethod(List<FunctionResult> functionResults, float percentageOfBestElements);
 
     Map<FunctionResult, Double> rouletteMethod(List<FunctionResult> functionResults, Mode mode);
 

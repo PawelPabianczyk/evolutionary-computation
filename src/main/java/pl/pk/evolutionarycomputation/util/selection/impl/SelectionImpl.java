@@ -18,9 +18,9 @@ public class SelectionImpl implements ISelection {
 
     @Override
     public List<FunctionResult> bestElementsMethod(List<FunctionResult> functionResults,
-                                                   Long percentageOfBestElements) {
+                                                   float percentageOfBestElements) {
 
-        long numberOfChromosomes = functionResults.size() * percentageOfBestElements; //TODO
+        int numberOfChromosomes = (int) Math.ceil(functionResults.size() * percentageOfBestElements);
 
         return functionResults.stream()
                 .sorted()
@@ -30,7 +30,7 @@ public class SelectionImpl implements ISelection {
 
     @Override
     public Map<FunctionResult, Double> rouletteMethod(List<FunctionResult> functionResults, Mode mode) {
-        double sum = 0.0;
+        double sum;
 
         if (mode.equals(Mode.MINIMIZATION)) {
             functionResults.forEach(result -> result.setValue(1.0 / result.getValue())); //TODO
