@@ -3,15 +3,14 @@ package pl.pk.evolutionarycomputation.util.selection.impl;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Component;
 import pl.pk.evolutionarycomputation.enums.Mode;
+import pl.pk.evolutionarycomputation.enums.Rank;
 import pl.pk.evolutionarycomputation.enums.Tournament;
 import pl.pk.evolutionarycomputation.model.FunctionResult;
 import pl.pk.evolutionarycomputation.util.selection.ISelection;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 public class SelectionImpl implements ISelection {
@@ -33,7 +32,7 @@ public class SelectionImpl implements ISelection {
         double sum;
 
         if (mode.equals(Mode.MINIMIZATION)) {
-            functionResults.forEach(result -> result.setValue(1.0 / result.getValue())); //TODO
+            functionResults.forEach(result -> result.setValue(1.0 / result.getValue()));
         }
 
         sum = getSum(functionResults);
@@ -51,41 +50,71 @@ public class SelectionImpl implements ISelection {
         return switch (tournament) {
             case SINGLE -> singleTournament(functionResults, tournamentSize);
             case DOUBLE -> doubleTournament(functionResults, tournamentSize);
-            case RANKING -> rankingTournament(functionResults);
         };
     }
 
+    @Override
+    public List<FunctionResult> rankingMethod(List<FunctionResult> functionResults, Rank rank) {
+        List<FunctionResult> resultList = new LinkedList<>();
+
+        List<FunctionResult> sortedList = switch (rank) {
+            case MINIMUM_VALUE -> sortAsc(functionResults);
+            case MAXIMUM_VALUE -> sortDesc(functionResults);
+        };
+
+        for (FunctionResult result : sortedList) {
+            addElementByRank(sortedList, resultList, result);
+        }
+
+        return resultList;
+    }
+
+    private void addElementByRank(List<FunctionResult> sortedList, List<FunctionResult> resultList, FunctionResult result) {
+        IntStream.range(0, sortedList.indexOf(result) + 1)
+                .mapToObj(i -> result)
+                .forEachOrdered(resultList::add);
+    }
+
+    private List<FunctionResult> sortAsc(List<FunctionResult> functionResults) {
+        return functionResults.stream().sorted().toList();
+    }
+
+    private List<FunctionResult> sortDesc(List<FunctionResult> functionResults) {
+        return functionResults.stream().sorted(Comparator.reverseOrder()).toList();
+    }
+
     private List<FunctionResult> singleTournament(List<FunctionResult> functionResults, int tournamentSize) {
-        return getListOfMaxValues(functionResults, tournamentSize);
+        return getListOfMaxValuesFromShuffledSubLists(functionResults, tournamentSize);
     }
 
     private List<FunctionResult> doubleTournament(List<FunctionResult> functionResults, int tournamentSize) {
         for (int i = 0; i < 2; i++) {
-            functionResults = getListOfMaxValues(functionResults, tournamentSize);
+            functionResults = getListOfMaxValuesFromShuffledSubLists(functionResults, tournamentSize);
         }
 
         return functionResults;
     }
 
-    private List<FunctionResult> rankingTournament(List<FunctionResult> functionResults) {
-        return functionResults.stream()
-                .sorted()
-                .toList(); //TODO
-    }
+    private List<FunctionResult> getListOfMaxValuesFromShuffledSubLists(List<FunctionResult> functionResults,
+                                                                        int tournamentSize) {
+        Collections.shuffle(functionResults);
 
-    private List<FunctionResult> getListOfMaxValues(List<FunctionResult> functionResults, int tournamentSize) {
         return Lists.partition(functionResults, tournamentSize).stream()
-                .map(subList -> subList.stream().min(FunctionResult::compareTo).orElse(new FunctionResult())) //TODO
-                .toList();
+                .map(subList -> subList
+                        .stream()
+                        .min(FunctionResult::compareTo)
+                        .orElse(new FunctionResult())
+                )
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 
     private Map<FunctionResult, Double> getDistributionMap(Map<FunctionResult, Double> probabilityMap) {
-        Map<FunctionResult, Double> map = new HashMap<>();
         double distribution = 0.0;
+        Map<FunctionResult, Double> map = new LinkedHashMap<>();
 
         for (FunctionResult functionResult : probabilityMap.keySet()) {
+            distribution += probabilityMap.get(functionResult);
             map.put(functionResult, distribution);
-            distribution += functionResult.getValue(); //TODO
         }
 
         return map;
@@ -101,8 +130,11 @@ public class SelectionImpl implements ISelection {
     private Map<FunctionResult, Double> getProbabilityMap(List<FunctionResult> functionResults, double sum) {
         return functionResults.stream()
                 .collect(Collectors.toMap(
-                        Function.identity(),
-                        result -> result.getValue() / sum //TODO
-                ));
+                                functionResult -> functionResult,
+                                functionResult -> (functionResult.getValue() / sum),
+                                (a, b) -> b,
+                                LinkedHashMap::new
+                        )
+                );
     }
 }

@@ -1,6 +1,7 @@
 package pl.pk.evolutionarycomputation.util.selection;
 
 import pl.pk.evolutionarycomputation.enums.Mode;
+import pl.pk.evolutionarycomputation.enums.Rank;
 import pl.pk.evolutionarycomputation.enums.Tournament;
 import pl.pk.evolutionarycomputation.model.FunctionResult;
 
@@ -13,4 +14,6 @@ public interface ISelection {
     Map<FunctionResult, Double> rouletteMethod(List<FunctionResult> functionResults, Mode mode);
 
     List<FunctionResult> tournamentMethod(List<FunctionResult> functionResults, int tournamentSize, Tournament tournament);
+
+    List<FunctionResult> rankingMethod(List<FunctionResult> functionResults, Rank rank);
 }

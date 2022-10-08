@@ -8,12 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import pl.pk.evolutionarycomputation.enums.Mode;
+import pl.pk.evolutionarycomputation.enums.Rank;
 import pl.pk.evolutionarycomputation.enums.Tournament;
 import pl.pk.evolutionarycomputation.model.Chromosome;
 import pl.pk.evolutionarycomputation.model.FunctionResult;
 import pl.pk.evolutionarycomputation.util.selection.impl.SelectionImpl;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 @RunWith(SpringRunner.class)
@@ -23,29 +27,28 @@ class ISelectionTest {
     List<FunctionResult> listOfExamples;
 
     @Autowired
-    SelectionImpl selection;    //TODO
+    SelectionImpl selection;
 
     @BeforeEach
     void setUp() {
         Function<Double, Double> quadraticFunction = (x) -> (2 * Math.pow(x, 2)) + 5;
 
-        listOfExamples = List.of(
-                new FunctionResult(new Chromosome(-3), quadraticFunction),
-                new FunctionResult(new Chromosome(-2.5), quadraticFunction),
-                new FunctionResult(new Chromosome(2), quadraticFunction),
-                new FunctionResult(new Chromosome(4), quadraticFunction),
-                new FunctionResult(new Chromosome(1.75), quadraticFunction),
-                new FunctionResult(new Chromosome(3.25), quadraticFunction),
-                new FunctionResult(new Chromosome(8.5), quadraticFunction),
-                new FunctionResult(new Chromosome(5.5), quadraticFunction),
-                new FunctionResult(new Chromosome(9.75), quadraticFunction)
-        );
+        listOfExamples = new LinkedList<>();
+        listOfExamples.add(new FunctionResult(new Chromosome(-3), quadraticFunction));
+        listOfExamples.add(new FunctionResult(new Chromosome(-2.5), quadraticFunction));
+        listOfExamples.add(new FunctionResult(new Chromosome(2), quadraticFunction));
+        listOfExamples.add(new FunctionResult(new Chromosome(4), quadraticFunction));
+        listOfExamples.add(new FunctionResult(new Chromosome(1.75), quadraticFunction));
+        listOfExamples.add(new FunctionResult(new Chromosome(3.25), quadraticFunction));
+        listOfExamples.add(new FunctionResult(new Chromosome(8.5), quadraticFunction));
+        listOfExamples.add(new FunctionResult(new Chromosome(5.5), quadraticFunction));
+        listOfExamples.add(new FunctionResult(new Chromosome(9.75), quadraticFunction));
     }
 
     @Test
     void bestElementsMethod() {
         float percentage = 0.3f;
-        float expectedValue = Math.round(listOfExamples.size() * percentage); //TODO
+        float expectedValue = Math.round(listOfExamples.size() * percentage);
 
         List<FunctionResult> resultList = this.selection.bestElementsMethod(this.listOfExamples, percentage);
 
@@ -63,19 +66,60 @@ class ISelectionTest {
     }
 
     @Test
-    void rouletteMethod() {
+    void rouletteMethodTest() {
+        Map<FunctionResult, Double> functionResultDoubleMap = this.selection.rouletteMethod(listOfExamples, Mode.MAXIMIZATION);
+
+        Assertions.assertEquals(0.042761, functionResultDoubleMap.get(listOfExamples.get(0)), 0.000001);
+        Assertions.assertEquals(0.075296305, functionResultDoubleMap.get(listOfExamples.get(1)), 0.000001);
+        Assertions.assertEquals(0.099465489, functionResultDoubleMap.get(listOfExamples.get(2)), 0.000001);
+        Assertions.assertEquals(0.168254706, functionResultDoubleMap.get(listOfExamples.get(3)), 0.000001);
+        Assertions.assertEquals(0.18893795, functionResultDoubleMap.get(listOfExamples.get(4)), 0.000001);
+        Assertions.assertEquals(0.237508715, functionResultDoubleMap.get(listOfExamples.get(5)), 0.000001);
+        Assertions.assertEquals(0.515454334, functionResultDoubleMap.get(listOfExamples.get(6)), 0.000001);
+        Assertions.assertEquals(0.63722984, functionResultDoubleMap.get(listOfExamples.get(7)), 0.000001);
+        Assertions.assertEquals(1, functionResultDoubleMap.get(listOfExamples.get(8)), 0.000001);
     }
 
     @Test
-    void tournamentMethod() {
+    void SINGLE_tournamentMethodTest() {
         int tournamentSize = 3;
 
-        List<FunctionResult> resultList = this.selection.
-                tournamentMethod(this.listOfExamples, tournamentSize, Tournament.SINGLE);
+        List<FunctionResult> resultList = this.selection
+                .tournamentMethod(this.listOfExamples, tournamentSize, Tournament.SINGLE);
 
-
-        Assertions.assertTrue(resultList.contains(listOfExamples.get(4)));
-//        Assertions.assertTrue(resultList.contains(listOfExamples.get(1)));    //TODO
-//        Assertions.assertTrue(resultList.contains(listOfExamples.get(5)));    //TODO
+        Assertions.assertEquals(3, resultList.size());
     }
+
+
+    @Test
+    void DOUBLE_tournamentMethodTest() {
+        int tournamentSize = 3;
+
+        List<FunctionResult> copyOfListOfExamples = new LinkedList<>(listOfExamples);
+
+        List<FunctionResult> resultList = this.selection
+                .tournamentMethod(this.listOfExamples, tournamentSize, Tournament.DOUBLE);
+
+        Assertions.assertEquals(1, resultList.size());
+        Assertions.assertEquals(resultList.get(0), copyOfListOfExamples.get(4));
+    }
+
+    @Test
+    void MINIMUM_VALUE_rankingMethodTest() {
+        int expectedNumberOfElements = 45;
+
+        List<FunctionResult> resultList = this.selection.rankingMethod(this.listOfExamples, Rank.MINIMUM_VALUE);
+
+        Assertions.assertEquals(expectedNumberOfElements, resultList.size());
+    }
+
+    @Test
+    void MAXIMUM_VALUE_rankingMethodTest() {
+        int expectedNumberOfElements = 45;
+
+        List<FunctionResult> resultList = this.selection.rankingMethod(this.listOfExamples, Rank.MAXIMUM_VALUE);
+
+        Assertions.assertEquals(expectedNumberOfElements, resultList.size());
+    }
+
 }

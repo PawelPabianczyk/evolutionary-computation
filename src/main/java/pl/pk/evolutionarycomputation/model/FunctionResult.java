@@ -1,14 +1,12 @@
 package pl.pk.evolutionarycomputation.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.function.Function;
 
 @Setter
 @Getter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class FunctionResult implements Comparable<FunctionResult> {
