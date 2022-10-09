@@ -33,29 +33,9 @@ class ChromosomeGeneratorTest {
     }
 
     @Test
-    void generateGivenNumberOfChromosomesTest() {
-        List<Chromosome> chromosomes = this.chromosomeGenerator
-                .generateListOfChromosomes(numberOfElements, firstXValue, secondXValue);
-
-        Assertions.assertEquals(expectedNumberOfElements, chromosomes.size());
-    }
-
-    @Test
     void generateBinaryGivenNumberOfChromosomesTest() {
         List<Chromosome> chromosomes = this.chromosomeGenerator
                 .generateChromosomesBinary(numberOfElements, firstXValue, secondXValue);
-
-        Assertions.assertEquals(expectedNumberOfElements, chromosomes.size());
-    }
-
-    @Test
-    void checkValuesInChromosomesTest() {
-        List<Chromosome> chromosomes = this.chromosomeGenerator
-                .generateListOfChromosomes(numberOfElements, firstXValue, secondXValue)
-                .stream()
-                .filter(chromosome -> chromosome.getValue() <= secondXValue)
-                .filter(chromosome -> chromosome.getValue() >= firstXValue - 5)
-                .toList();
 
         Assertions.assertEquals(expectedNumberOfElements, chromosomes.size());
     }
