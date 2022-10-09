@@ -37,6 +37,6 @@ class BinaryCalculatorTest {
                 0,
                 0,
                 0
-        }, 10));
+        }));
     }
 }

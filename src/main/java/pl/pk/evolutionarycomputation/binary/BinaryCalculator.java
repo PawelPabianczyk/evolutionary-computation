@@ -5,17 +5,17 @@ public class BinaryCalculator {
     private BinaryCalculator() {
     }
 
-    public static double getLengthOfChromosome(double a, double b) {
-        double m = log2((b - a) * Math.pow(10, 6)) + log2(1);
-        return Math.ceil(m);
+    public static int getLengthOfChromosome(double minimumValue, double maximumValue) {
+        double lengthOfChromosome = log2((maximumValue - minimumValue) * Math.pow(10, 6)) + log2(1);
+        return (int) Math.ceil(lengthOfChromosome);
     }
 
     private static double log2(double logNumber) {
         return Math.log(logNumber) / Math.log(2);
     }
 
-    public static double decodeBinaryNumber(double a, double b, double m, double decimal) {
-        double x = a + decimal * (b - a) / (Math.pow(2, m) - 1);
+    public static double decodeBinaryNumber(double minimumValue, double maximumValue, double lengthOfChromosome, double decimal) {
+        double x = minimumValue + decimal * (maximumValue - minimumValue) / (Math.pow(2, lengthOfChromosome) - 1);
         return Math.round(x * Math.pow(10, 5)) / Math.pow(10, 5);
 
     }
@@ -24,12 +24,12 @@ public class BinaryCalculator {
         return Integer.parseInt(binaryNumber, 2);
     }
 
-    public static double getDecimal(byte[] binaryNumber, double m) {
+    public static double getDecimal(byte[] binaryNumber) {
 
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < m; i++) {
-            if (binaryNumber[i] == 1)
+        for (byte b : binaryNumber) {
+            if (b == 1)
                 sb.append("1");
             else sb.append("0");
         }
