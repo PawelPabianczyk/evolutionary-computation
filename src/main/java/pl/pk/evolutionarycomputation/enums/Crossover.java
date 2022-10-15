@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public enum Crossover {
-    ONE_POINT{
+    ONE_POINT {
         @Override
         protected void crossover(byte[] a, byte[] b) {
             int point = ThreadLocalRandom.current().nextInt(1, a.length - 1);
@@ -15,7 +15,7 @@ public enum Crossover {
             swap(a, b, 0, point);
         }
     },
-    TWO_POINT{
+    TWO_POINT {
         @Override
         protected void crossover(byte[] a, byte[] b) {
             int firstPoint = ThreadLocalRandom.current().nextInt(1, a.length / 2);
@@ -24,7 +24,7 @@ public enum Crossover {
             swap(a, b, firstPoint, secondPoint);
         }
     },
-    THREE_POINT{
+    THREE_POINT {
         @Override
         protected void crossover(byte[] a, byte[] b) {
             int firstPoint = ThreadLocalRandom.current().nextInt(1, a.length / 3);
@@ -36,11 +36,11 @@ public enum Crossover {
         }
     },
 
-    UNIFORM{
+    UNIFORM {
         @Override
         protected void crossover(byte[] a, byte[] b) {
             for (int i = 0; i < a.length; i++) {
-                if (ThreadLocalRandom.current().nextInt(2) == 0){
+                if (ThreadLocalRandom.current().nextInt(2) == 0) {
                     byte buffer = a[i];
                     a[i] = b[i];
                     b[i] = buffer;
@@ -50,11 +50,20 @@ public enum Crossover {
     };
 
 
-    public List<Chromosome> compute(List<Chromosome> chromosomes, int probability){
+    private static void swap(byte[] a, byte[] b, int pointA, int pointB) {
+        byte[] buffer = new byte[a.length];
+        for (int i = pointA; i < pointB; i++) {
+            buffer[i] = a[i];
+            a[i] = b[i];
+            b[i] = buffer[i];
+        }
+    }
+
+    public List<Chromosome> compute(List<Chromosome> chromosomes, int probability) {
         Collections.shuffle(chromosomes);
         for (int i = 1; i < chromosomes.size(); i += 2) {
 
-            if (ThreadLocalRandom.current().nextInt(1, 101) <= probability){
+            if (ThreadLocalRandom.current().nextInt(1, 101) <= probability) {
                 byte[] a = chromosomes.get(i - 1).getBytesRepresentation();
                 byte[] b = chromosomes.get(i).getBytesRepresentation();
 
@@ -68,14 +77,6 @@ public enum Crossover {
         return chromosomes;
     }
 
-     protected abstract void crossover(byte[] a, byte[] b);
-    private static void swap(byte[] a, byte[] b, int pointA, int pointB) {
-        byte[] buffer = new byte[a.length];
-        for (int i = pointA; i < pointB; i++) {
-            buffer[i] = a[i];
-            a[i] = b[i];
-            b[i] = buffer[i];
-        }
-    }
+    protected abstract void crossover(byte[] a, byte[] b);
 
 }

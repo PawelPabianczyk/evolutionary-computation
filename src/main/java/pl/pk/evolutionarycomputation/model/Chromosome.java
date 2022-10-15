@@ -15,13 +15,6 @@ public class Chromosome {
 
     private final int maximumValue;
 
-    public Chromosome(double value) {
-        this.value = value;
-        this.bytesRepresentation = new byte[]{};
-        this.minimumValue = 0;  // TODO: 09/10/2022 only for testing
-        this.maximumValue = 100;    // TODO: 09/10/2022 only for testing
-    }
-
     public Chromosome(byte[] bytesRepresentation, int minimumValue, int maximumValue) {
         this.minimumValue = minimumValue;
         this.maximumValue = maximumValue;

@@ -5,22 +5,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import pl.pk.evolutionarycomputation.model.GeneticAlgorithmConfiguration;
-
-import java.util.HashMap;
-import java.util.Map;
+import pl.pk.evolutionarycomputation.dto.GeneticAlgorithmConfigurationDTO;
 
 @Controller
 public class BasicController {
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index(Model model) {
-        model.addAttribute("algConf", new GeneticAlgorithmConfiguration());
+        model.addAttribute("algConf", new GeneticAlgorithmConfigurationDTO());
         return "index";
     }
 
     @RequestMapping(value = "/index", method = RequestMethod.POST)
-    public String sendFormData(@ModelAttribute("algConf") GeneticAlgorithmConfiguration configuration) {
+    public String sendFormData(@ModelAttribute("algConf") GeneticAlgorithmConfigurationDTO configuration) {
         System.out.println(configuration.isMaximization());
         System.out.println(configuration.getCrossMethod());
         return "redirect:/results";

@@ -9,11 +9,18 @@ import java.util.List;
 import java.util.Map;
 
 public interface ISelection {
-    List<FunctionResult> bestElementsMethod(List<FunctionResult> functionResults, float percentageOfBestElements);
+    List<FunctionResult> bestElementsMethod(List<FunctionResult> functionResults,
+                                            float percentageOfBestElements,
+                                            Mode mode);
 
-    Map<FunctionResult, Double> rouletteMethod(List<FunctionResult> functionResults, Mode mode);
+    Map<FunctionResult, Double> rouletteMethod(List<FunctionResult> functionResults,
+                                               Mode mode);
 
-    List<FunctionResult> tournamentMethod(List<FunctionResult> functionResults, int tournamentSize, Tournament tournament);
+    List<FunctionResult> tournamentMethod(List<FunctionResult> functionResults,
+                                          int tournamentSize,
+                                          Tournament tournament,
+                                          Mode mode);
 
-    List<FunctionResult> rankingMethod(List<FunctionResult> functionResults, Rank rank);
+    List<FunctionResult> rankingMethod(List<FunctionResult> functionResults,
+                                       Rank rank);
 }

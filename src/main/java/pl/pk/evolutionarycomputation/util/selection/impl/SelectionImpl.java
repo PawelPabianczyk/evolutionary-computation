@@ -17,14 +17,18 @@ public class SelectionImpl implements ISelection {
 
     @Override
     public List<FunctionResult> bestElementsMethod(List<FunctionResult> functionResults,
-                                                   float percentageOfBestElements) {
-
+                                                   float percentageOfBestElements,
+                                                   Mode mode) {
         int numberOfChromosomes = (int) Math.ceil(functionResults.size() * percentageOfBestElements);
 
-        return functionResults.stream()
-                .sorted()
-                .limit(numberOfChromosomes)
-                .toList();
+        return switch (mode) {
+            case MINIMIZATION -> sortAsc(functionResults).stream()
+                    .limit(numberOfChromosomes)
+                    .collect(Collectors.toList());
+            case MAXIMIZATION -> sortDesc(functionResults).stream()
+                    .limit(numberOfChromosomes)
+                    .collect(Collectors.toList());
+        };
     }
 
     @Override
@@ -45,11 +49,10 @@ public class SelectionImpl implements ISelection {
     @Override
     public List<FunctionResult> tournamentMethod(List<FunctionResult> functionResults,
                                                  int tournamentSize,
-                                                 Tournament tournament) {
-
+                                                 Tournament tournament, Mode mode) {
         return switch (tournament) {
-            case SINGLE -> singleTournament(functionResults, tournamentSize);
-            case DOUBLE -> doubleTournament(functionResults, tournamentSize);
+            case SINGLE -> singleTournament(functionResults, tournamentSize, mode);
+            case DOUBLE -> doubleTournament(functionResults, tournamentSize, mode);
         };
     }
 
@@ -69,43 +72,59 @@ public class SelectionImpl implements ISelection {
         return resultList;
     }
 
-    private void addElementByRank(List<FunctionResult> sortedList, List<FunctionResult> resultList, FunctionResult result) {
+    private void addElementByRank(List<FunctionResult> sortedList,
+                                  List<FunctionResult> resultList,
+                                  FunctionResult result) {
         IntStream.range(0, sortedList.indexOf(result) + 1)
                 .mapToObj(i -> result)
                 .forEachOrdered(resultList::add);
     }
 
     private List<FunctionResult> sortAsc(List<FunctionResult> functionResults) {
-        return functionResults.stream().sorted().toList();
+        return functionResults.stream()
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     private List<FunctionResult> sortDesc(List<FunctionResult> functionResults) {
-        return functionResults.stream().sorted(Comparator.reverseOrder()).toList();
+        return functionResults.stream()
+                .sorted(Comparator.reverseOrder())
+                .collect(Collectors.toList());
     }
 
-    private List<FunctionResult> singleTournament(List<FunctionResult> functionResults, int tournamentSize) {
-        return getListOfMaxValuesFromShuffledSubLists(functionResults, tournamentSize);
+    private List<FunctionResult> singleTournament(List<FunctionResult> functionResults,
+                                                  int tournamentSize, Mode mode) {
+        return getListOfMaxValuesFromShuffledSubLists(functionResults, tournamentSize, mode);
     }
 
-    private List<FunctionResult> doubleTournament(List<FunctionResult> functionResults, int tournamentSize) {
-        for (int i = 0; i < 2; i++) {
-            functionResults = getListOfMaxValuesFromShuffledSubLists(functionResults, tournamentSize);
-        }
+    private List<FunctionResult> doubleTournament(List<FunctionResult> functionResults,
+                                                  int tournamentSize, Mode mode) {
+
+        functionResults = getListOfMaxValuesFromShuffledSubLists(functionResults, tournamentSize, mode);
+        functionResults = getListOfMaxValuesFromShuffledSubLists(functionResults, tournamentSize, mode);
 
         return functionResults;
     }
 
     private List<FunctionResult> getListOfMaxValuesFromShuffledSubLists(List<FunctionResult> functionResults,
-                                                                        int tournamentSize) {
+                                                                        int tournamentSize, Mode mode) {
         Collections.shuffle(functionResults);
 
         return Lists.partition(functionResults, tournamentSize).stream()
-                .map(subList -> subList
-                        .stream()
-                        .min(FunctionResult::compareTo)
-                        .orElse(new FunctionResult())
-                )
+                .map(subList -> getFirstFunctionResultByMode(subList, mode))
                 .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    private FunctionResult getFirstFunctionResultByMode(List<FunctionResult> subList, Mode mode) {
+        return switch (mode) {
+            case MINIMIZATION -> subList.stream()
+                    .min(FunctionResult::compareTo)
+                    .orElse(new FunctionResult());
+
+            case MAXIMIZATION -> subList.stream()
+                    .max(FunctionResult::compareTo)
+                    .orElse(new FunctionResult());
+        };
     }
 
     private Map<FunctionResult, Double> getDistributionMap(Map<FunctionResult, Double> probabilityMap) {

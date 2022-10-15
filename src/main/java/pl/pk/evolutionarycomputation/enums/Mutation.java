@@ -38,6 +38,12 @@ public enum Mutation {
         }
     };
 
+    private static byte negateBit(byte bit) {
+        if (bit == 0)
+            return 1;
+        return 0;
+    }
+
     public List<Chromosome> compute(List<Chromosome> chromosomes, int probability) {
         for (int i = 0; i < chromosomes.size(); i++) {
 
@@ -53,10 +59,4 @@ public enum Mutation {
     }
 
     protected abstract byte[] mutation(byte[] bytes);
-
-    private static byte negateBit(byte bit) {
-        if (bit == 0)
-            return 1;
-        return 0;
-    }
 }
