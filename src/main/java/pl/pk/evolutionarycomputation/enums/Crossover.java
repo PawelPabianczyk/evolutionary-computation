@@ -2,6 +2,7 @@ package pl.pk.evolutionarycomputation.enums;
 
 import pl.pk.evolutionarycomputation.model.Chromosome;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -61,20 +62,21 @@ public enum Crossover {
 
     public List<Chromosome> compute(List<Chromosome> chromosomes, int probability) {
         Collections.shuffle(chromosomes);
+        List<Chromosome> results = new ArrayList<>();
         for (int i = 1; i < chromosomes.size(); i += 2) {
 
             if (ThreadLocalRandom.current().nextInt(1, 101) <= probability) {
-                byte[] a = chromosomes.get(i - 1).getBytesRepresentation();
-                byte[] b = chromosomes.get(i).getBytesRepresentation();
+                byte[] a = chromosomes.get(i - 1).getBinaryRepresentation();
+                byte[] b = chromosomes.get(i).getBinaryRepresentation();
 
                 crossover(a, b);
 
-                chromosomes.set(i - 1, new Chromosome(a, chromosomes.get(i - 1).getMinimumValue(), chromosomes.get(i - 1).getMaximumValue()));
-                chromosomes.set(i, new Chromosome(b, chromosomes.get(i).getMinimumValue(), chromosomes.get(i).getMaximumValue()));
+                results.add(new Chromosome(a, chromosomes.get(i - 1).getMinimumValue(), chromosomes.get(i - 1).getMaximumValue()));
+                results.add(new Chromosome(b, chromosomes.get(i).getMinimumValue(), chromosomes.get(i).getMaximumValue()));
             }
         }
 
-        return chromosomes;
+        return results;
     }
 
     protected abstract void crossover(byte[] a, byte[] b);

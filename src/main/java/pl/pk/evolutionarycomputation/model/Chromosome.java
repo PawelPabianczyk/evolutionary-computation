@@ -9,16 +9,16 @@ import static pl.pk.evolutionarycomputation.binary.BinaryCalculator.getDecimal;
 @ToString
 public class Chromosome {
     private final double value;
-    private final byte[] bytesRepresentation;
+    private final byte[] binaryRepresentation;
 
     private final int minimumValue;
 
     private final int maximumValue;
 
-    public Chromosome(byte[] bytesRepresentation, int minimumValue, int maximumValue) {
+    public Chromosome(byte[] binaryRepresentation, int minimumValue, int maximumValue) {
         this.minimumValue = minimumValue;
         this.maximumValue = maximumValue;
-        this.bytesRepresentation = bytesRepresentation;
-        value = decodeBinaryNumber(minimumValue, maximumValue, bytesRepresentation.length, getDecimal(bytesRepresentation));
+        this.binaryRepresentation = binaryRepresentation;
+        value = decodeBinaryNumber(minimumValue, maximumValue, binaryRepresentation.length, getDecimal(binaryRepresentation));
     }
 }

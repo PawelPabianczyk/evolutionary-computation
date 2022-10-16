@@ -36,6 +36,28 @@ public enum Mutation {
 
             return bytes;
         }
+    },
+    INVERSE {
+        @Override
+        protected byte[] mutation(byte[] bytes) {
+            int firstPosition = ThreadLocalRandom.current().nextInt(bytes.length);
+            bytes[firstPosition] = negateBit(bytes[firstPosition]);
+            int secondPosition = ThreadLocalRandom.current().nextInt(bytes.length);
+            while (secondPosition == firstPosition)
+                secondPosition = ThreadLocalRandom.current().nextInt(bytes.length);
+
+            int i = Math.min(firstPosition, secondPosition);
+            int j = Math.max(firstPosition, secondPosition);
+
+            while(i <j){
+                byte buffer = bytes[i];
+                bytes[i] = bytes[j];
+                bytes[j] = buffer;
+                i++;
+                j--;
+            }
+            return bytes;
+        }
     };
 
     private static byte negateBit(byte bit) {
@@ -48,7 +70,7 @@ public enum Mutation {
         for (int i = 0; i < chromosomes.size(); i++) {
 
             if (ThreadLocalRandom.current().nextInt(1, 101) <= probability) {
-                byte[] bytes = chromosomes.get(i).getBytesRepresentation();
+                byte[] bytes = chromosomes.get(i).getBinaryRepresentation();
                 int minValue = chromosomes.get(i).getMinimumValue();
                 int maxValue = chromosomes.get(i).getMaximumValue();
                 chromosomes.set(i, new Chromosome(mutation(bytes), minValue, maxValue));
