@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public enum Crossover2 {
     ONE_POINT {
@@ -61,9 +62,9 @@ public enum Crossover2 {
         }
     }
 
-    public List<Candidate> compute(List<Candidate> candidates, int probability) {
+    public List<Candidate> compute(List<Candidate> candidates, int populationAmount, int probability) {
         List<Candidate> newCandidates = new ArrayList<>();
-        while (newCandidates.size() < candidates.size()) {
+        while (newCandidates.size() < populationAmount) {
             Collections.shuffle(candidates);
             for (int i = 1; i < candidates.size(); i += 2) {
                 if (ThreadLocalRandom.current().nextInt(1, 101) <= probability) {
@@ -90,7 +91,7 @@ public enum Crossover2 {
             }
         }
 
-        return newCandidates.stream().limit(candidates.size()).toList();
+        return newCandidates.stream().limit(populationAmount).collect(Collectors.toList());
     }
 
     protected abstract void crossover(byte[] a, byte[] b);

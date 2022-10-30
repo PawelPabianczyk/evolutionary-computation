@@ -8,8 +8,8 @@
 3. Projekt można wykonać w dowolnym języku programowania (z wyjątkiem Matlaba).
 4. Zawartość projektu:
    - [x] Implementacja binarnej reprezentacji chromosomu + konfiguracja dokładności
-   - [ ] Implementacja konfiguracji wielkości populacji
-   - [ ] Implementacja konfiguracji liczby epok
+   - [x] Implementacja konfiguracji wielkości populacji
+   - [x] Implementacja konfiguracji liczby epok
    - [x] Implementacja metod selekcji najlepszych, kołem ruletki, selekcji turniejowej +
              konfiguracje parametrów
    - [x] Implementacja krzyżowania jedno, dwu, trzy punktowego oraz krzyżowania
@@ -18,7 +18,7 @@
        prawdopodobieństwa mutacji
    - [x] Implementacja operatora inwersji + konfiguracja prawdopodobieństwa jego
          wystąpienia
-   - [ ] Implementacja strategii elitarnej + konfiguracja % lub liczby osobników przechodzącej kolejnej populacji
+   - [x] Implementacja strategii elitarnej + konfiguracja % lub liczby osobników przechodzącej kolejnej populacji
 
 5. Proszę wybrać sobie jakąś ciekawą funkcję celu przynajmniej dwóch zmiennych.
    Przykładowe funkcje zostały podane przez prowadzącego funkcje.pdf
