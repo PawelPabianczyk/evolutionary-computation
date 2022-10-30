@@ -1,7 +1,7 @@
 package pl.pk.evolutionarycomputation.dto;
 
-import pl.pk.evolutionarycomputation.enums.Crossover2;
-import pl.pk.evolutionarycomputation.enums.Mutation2;
+import pl.pk.evolutionarycomputation.enums.Crossover;
+import pl.pk.evolutionarycomputation.enums.Mutation;
 import pl.pk.evolutionarycomputation.enums.Selection;
 
 public class GeneticAlgorithmConfigurationDTO {
@@ -15,8 +15,8 @@ public class GeneticAlgorithmConfigurationDTO {
     private final int mutationProbability = 60;
     private final int inversionProbability = 20;
     private final Selection selectionMethod = Selection.BEST_ELEMENTS;
-    private final Crossover2 crossMethod = Crossover2.ONE_POINT;
-    private final Mutation2 mutationMethod = Mutation2.ONE_POINT;
+    private final Crossover crossMethod = Crossover.ONE_POINT;
+    private final Mutation mutationMethod = Mutation.ONE_POINT;
     private final boolean maximization = true;
 
     public int getRangeBegin() {
@@ -59,11 +59,11 @@ public class GeneticAlgorithmConfigurationDTO {
         return selectionMethod;
     }
 
-    public Crossover2 getCrossMethod() {
+    public Crossover getCrossMethod() {
         return crossMethod;
     }
 
-    public Mutation2 getMutationMethod() {
+    public Mutation getMutationMethod() {
         return mutationMethod;
     }
 

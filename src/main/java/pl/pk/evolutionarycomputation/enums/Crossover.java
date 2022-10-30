@@ -1,11 +1,13 @@
 package pl.pk.evolutionarycomputation.enums;
 
+import pl.pk.evolutionarycomputation.model.Candidate;
 import pl.pk.evolutionarycomputation.model.Chromosome;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public enum Crossover {
     ONE_POINT {
@@ -60,23 +62,36 @@ public enum Crossover {
         }
     }
 
-    public List<Chromosome> compute(List<Chromosome> chromosomes, int probability) {
-        Collections.shuffle(chromosomes);
-        List<Chromosome> results = new ArrayList<>();
-        for (int i = 1; i < chromosomes.size(); i += 2) {
+    public List<Candidate> compute(List<Candidate> candidates, int populationAmount, int probability) {
+        List<Candidate> newCandidates = new ArrayList<>();
+        while (newCandidates.size() < populationAmount) {
+            Collections.shuffle(candidates);
+            for (int i = 1; i < candidates.size(); i += 2) {
+                if (ThreadLocalRandom.current().nextInt(1, 101) <= probability) {
 
-            if (ThreadLocalRandom.current().nextInt(1, 101) <= probability) {
-                byte[] a = chromosomes.get(i - 1).getBinaryRepresentation();
-                byte[] b = chromosomes.get(i).getBinaryRepresentation();
+                    List<Chromosome> can1Chromosomes = candidates.get(i - 1).getChromosomes();
+                    List<Chromosome> newCan1Chromosomes = new ArrayList<>();
+                    List<Chromosome> can2Chromosomes = candidates.get(i).getChromosomes();
+                    List<Chromosome> newCan2Chromosomes = new ArrayList<>();
 
-                crossover(a, b);
 
-                results.add(new Chromosome(a, chromosomes.get(i - 1).getMinimumValue(), chromosomes.get(i - 1).getMaximumValue()));
-                results.add(new Chromosome(b, chromosomes.get(i).getMinimumValue(), chromosomes.get(i).getMaximumValue()));
+                    for (int j = 0; j < can1Chromosomes.size(); j++) {
+                        byte[] can1Chromosome = can1Chromosomes.get(j).getBinaryRepresentation();
+                        byte[] can2Chromosome = can2Chromosomes.get(j).getBinaryRepresentation();
+
+                        crossover(can1Chromosome, can2Chromosome);
+
+                        newCan1Chromosomes.add(new Chromosome(can1Chromosome, can1Chromosomes.get(j).getMinimumValue(), can1Chromosomes.get(j).getMaximumValue()));
+                        newCan2Chromosomes.add(new Chromosome(can2Chromosome, can2Chromosomes.get(j).getMinimumValue(), can2Chromosomes.get(j).getMaximumValue()));
+                    }
+
+                    newCandidates.add(new Candidate(newCan1Chromosomes));
+                    newCandidates.add(new Candidate(newCan2Chromosomes));
+                }
             }
         }
 
-        return results;
+        return newCandidates.stream().limit(populationAmount).collect(Collectors.toList());
     }
 
     protected abstract void crossover(byte[] a, byte[] b);

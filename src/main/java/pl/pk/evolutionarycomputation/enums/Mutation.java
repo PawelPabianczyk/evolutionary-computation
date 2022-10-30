@@ -1,5 +1,6 @@
 package pl.pk.evolutionarycomputation.enums;
 
+import pl.pk.evolutionarycomputation.model.Candidate;
 import pl.pk.evolutionarycomputation.model.Chromosome;
 
 import java.util.List;
@@ -66,18 +67,25 @@ public enum Mutation {
         return 0;
     }
 
-    public List<Chromosome> compute(List<Chromosome> chromosomes, int probability) {
-        for (int i = 0; i < chromosomes.size(); i++) {
+    public List<Candidate> compute(List<Candidate> candidates, int probability) {
+        for (int i = 0; i < candidates.size(); i++) {
 
-            if (ThreadLocalRandom.current().nextInt(1, 101) <= probability) {
-                byte[] bytes = chromosomes.get(i).getBinaryRepresentation();
-                int minValue = chromosomes.get(i).getMinimumValue();
-                int maxValue = chromosomes.get(i).getMaximumValue();
-                chromosomes.set(i, new Chromosome(mutation(bytes), minValue, maxValue));
+            List<Chromosome> canChromosomes = candidates.get(i).getChromosomes();
+
+            for (int j = 0; j < canChromosomes.size(); j++) {
+                if (ThreadLocalRandom.current().nextInt(1, 101) <= probability) {
+                    byte[] bytes = canChromosomes.get(j).getBinaryRepresentation();
+                    int minValue = canChromosomes.get(j).getMinimumValue();
+                    int maxValue = canChromosomes.get(j).getMaximumValue();
+                    canChromosomes.set(j, new Chromosome(mutation(bytes), minValue, maxValue));
+                }
             }
+
+            candidates.set(i, new Candidate(canChromosomes));
+
         }
 
-        return chromosomes;
+        return candidates;
     }
 
     protected abstract byte[] mutation(byte[] bytes);

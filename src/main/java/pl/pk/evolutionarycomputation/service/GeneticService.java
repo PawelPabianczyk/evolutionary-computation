@@ -5,5 +5,4 @@ import pl.pk.evolutionarycomputation.dto.ResultsDTO;
 
 public interface GeneticService {
     ResultsDTO perform(GeneticAlgorithmConfigurationDTO geneticAlgorithmConfigurationDTO);
-    ResultsDTO perform2(GeneticAlgorithmConfigurationDTO geneticAlgorithmConfigurationDTO);
 }

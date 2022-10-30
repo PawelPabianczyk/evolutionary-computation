@@ -2,26 +2,30 @@ package pl.pk.evolutionarycomputation.model;
 
 import lombok.*;
 
-import java.util.function.Function;
+import java.util.function.BinaryOperator;
 
-@Setter
 @Getter
 @ToString
-@AllArgsConstructor
-@NoArgsConstructor
 public class FunctionResult implements Comparable<FunctionResult> {
-    private Chromosome chromosome;
+    private final Candidate candidate;
     private Double value;
-    private Function<Double, Double> function;
+    private final BinaryOperator<Double> function;
 
-    public FunctionResult(Chromosome chromosome, Function<Double, Double> function) {
-        this.chromosome = chromosome;
-        this.value = function.apply(chromosome.getValue());
+    public FunctionResult(Candidate candidate, BinaryOperator<Double> function) {
+        this.candidate = candidate;
+        this.value = function.apply(candidate.getChromosomes().get(0).getValue(), candidate.getChromosomes().get(1).getValue());
         this.function = function;
     }
 
     @Override
     public int compareTo(FunctionResult o) {
         return this.value.compareTo(o.getValue());
+    }
+
+    // TODO: 30/10/2022 add equals, hashcode
+
+
+    public void setValue(Double value) {
+        this.value = value;
     }
 }
