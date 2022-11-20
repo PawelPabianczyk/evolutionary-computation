@@ -22,9 +22,6 @@ public class FunctionResult implements Comparable<FunctionResult> {
         return this.value.compareTo(o.getValue());
     }
 
-    // TODO: 30/10/2022 add equals, hashcode
-
-
     public void setValue(Double value) {
         this.value = value;
     }

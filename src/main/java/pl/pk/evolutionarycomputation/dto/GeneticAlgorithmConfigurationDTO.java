@@ -3,6 +3,7 @@ package pl.pk.evolutionarycomputation.dto;
 import pl.pk.evolutionarycomputation.enums.Crossover;
 import pl.pk.evolutionarycomputation.enums.Mutation;
 import pl.pk.evolutionarycomputation.enums.Selection;
+import pl.pk.evolutionarycomputation.enums.Tournament;
 
 public class GeneticAlgorithmConfigurationDTO {
     private final int rangeBegin = -5;
@@ -14,10 +15,15 @@ public class GeneticAlgorithmConfigurationDTO {
     private final int crossProbability = 60;
     private final int mutationProbability = 40;
     private final int inversionProbability = 10;
-    private final Selection selectionMethod = Selection.BEST_ELEMENTS;
+    private final Selection selectionMethod = Selection.ROULETTE;
     private final Crossover crossMethod = Crossover.ONE_POINT;
     private final Mutation mutationMethod = Mutation.ONE_POINT;
+    private final Tournament tournament = Tournament.SINGLE;
     private final boolean maximization = true;
+
+    private final int percentageOfBestElements = 30;
+    private final int tournamentSize = 10;
+    private final int spinNumber = 30;
 
     public int getRangeBegin() {
         return rangeBegin;
@@ -69,5 +75,21 @@ public class GeneticAlgorithmConfigurationDTO {
 
     public boolean isMaximization() {
         return maximization;
+    }
+
+    public Tournament getTournament() {
+        return tournament;
+    }
+
+    public int getPercentageOfBestElements() {
+        return percentageOfBestElements;
+    }
+
+    public int getTournamentSize() {
+        return tournamentSize;
+    }
+
+    public int getSpinNumber() {
+        return spinNumber;
     }
 }

@@ -11,10 +11,11 @@ import java.util.Map;
 public interface ISelection {
 
     List<FunctionResult> bestElementsMethod(List<FunctionResult> functionResults,
-                                            float percentageOfBestElements,
+                                            int percentageOfBestElements,
                                             Mode mode);
 
-    Map<FunctionResult, Double> rouletteMethod(List<FunctionResult> functionResults,
+    List<FunctionResult> rouletteMethod(List<FunctionResult> functionResults,
+                                               int spinNumber,
                                                Mode mode);
 
     List<FunctionResult> tournamentMethod(List<FunctionResult> functionResults,

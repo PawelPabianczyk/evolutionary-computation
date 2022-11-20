@@ -9,6 +9,7 @@ import pl.pk.evolutionarycomputation.model.FunctionResult;
 import pl.pk.evolutionarycomputation.util.selection.ISelection;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -17,8 +18,8 @@ public class SelectionImpl implements ISelection {
 
 
     @Override
-    public List<FunctionResult> bestElementsMethod(List<FunctionResult> functionResults, float percentageOfBestElements, Mode mode) {
-        int numberOfChromosomes = (int) Math.ceil(functionResults.size() * percentageOfBestElements);
+    public List<FunctionResult> bestElementsMethod(List<FunctionResult> functionResults, int percentageOfBestElements, Mode mode) {
+        int numberOfChromosomes = (int) Math.ceil(functionResults.size() * (percentageOfBestElements/100));
 
         return switch (mode) {
             case MINIMIZATION -> sortAsc(functionResults).stream()
@@ -32,9 +33,7 @@ public class SelectionImpl implements ISelection {
 
 
     @Override
-    public Map<FunctionResult, Double> rouletteMethod(List<FunctionResult> functionResults, Mode mode) {
-        // TODO: 30/10/2022 add how many times we need to spin the wheel
-
+    public List<FunctionResult> rouletteMethod(List<FunctionResult> functionResults,int spinNumber, Mode mode) {
         double sum;
 
         if (mode.equals(Mode.MINIMIZATION)) {
@@ -45,7 +44,24 @@ public class SelectionImpl implements ISelection {
 
         Map<FunctionResult, Double> probabilityMap = getProbabilityMap(functionResults, sum);
 
-        return getDistributionMap(probabilityMap);
+        Map<Double, FunctionResult> distributionMap = getDistributionMap(probabilityMap);
+
+        List<FunctionResult> selected = new ArrayList<>();
+
+        for (int i = 0; i < spinNumber; i++) {
+            double probability = ThreadLocalRandom.current().nextDouble(1.0);
+
+            for (Double distribution :
+                    distributionMap.keySet()) {
+                if(probability < distribution){
+                    selected.add(distributionMap.get(distribution));
+                    distributionMap.remove(distribution);
+                    break;
+                }
+            }
+        }
+
+        return selected;
     }
 
 
@@ -119,7 +135,7 @@ public class SelectionImpl implements ISelection {
 
         return Lists.partition(functionResults, tournamentSize).stream()
                 .map(subList -> getFirstFunctionResultByMode(subList, mode))
-                .collect(Collectors.toCollection(LinkedList::new));
+                .collect(Collectors.toList());
     }
 
 
@@ -136,16 +152,18 @@ public class SelectionImpl implements ISelection {
     }
 
 
-    private Map<FunctionResult, Double> getDistributionMap(Map<FunctionResult, Double> probabilityMap) {
+    private Map<Double, FunctionResult> getDistributionMap(Map<FunctionResult, Double> probabilityMap) {
         double distribution = 0.0;
-        Map<FunctionResult, Double> map = new LinkedHashMap<>();
+
+        SortedMap<Double, FunctionResult> distributionMap
+                = new TreeMap<>();
 
         for (FunctionResult functionResult : probabilityMap.keySet()) {
             distribution += probabilityMap.get(functionResult);
-            map.put(functionResult, distribution);
+            distributionMap.put(distribution, functionResult);
         }
 
-        return map;
+        return distributionMap;
     }
 
 

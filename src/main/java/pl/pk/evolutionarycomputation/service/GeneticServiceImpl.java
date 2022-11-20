@@ -65,11 +65,11 @@ public class GeneticServiceImpl implements GeneticService {
             double sum = functionResults.stream().mapToDouble(FunctionResult::getValue).map(x -> Math.pow((x - avgFunctionValue), 2)).sum();
             standardDeviations.put(i + 1, Math.sqrt(sum / functionResults.size()));
 
-            eliteCandidates = eliteStrategy(functionResults, dto.getEliteStrategyAmount(), Mode.MINIMIZATION);
+            eliteCandidates = eliteStrategy(functionResults, dto.getEliteStrategyAmount(), getMode(dto.isMaximization()));
 
             bestFunctionValues.put(i + 1, new FunctionResult(eliteCandidates.get(0), bealeFunction).getValue());
 
-            functionResults = selection(dto.getSelectionMethod(), functionResults);
+            functionResults = selection(dto.getSelectionMethod(), functionResults, getMode(dto.isMaximization()), dto.getTournament(), dto.getPercentageOfBestElements(), dto.getTournamentSize(), dto.getSpinNumber());
 
             candidates = crossover(dto.getCrossMethod(), functionResults.stream().map(FunctionResult::getCandidate).collect(Collectors.toList()), dto.getPopulationAmount(), dto.getCrossProbability());
 
@@ -88,7 +88,11 @@ public class GeneticServiceImpl implements GeneticService {
         saveToFile(avgFunctionValues, "avg_function_values");
         saveToFile(standardDeviations, "standard_deviations");
 
-        return new ResultsDTO(calculationTime, bestFunctionValues, avgFunctionValues, standardDeviations); //TODO
+        return new ResultsDTO(calculationTime, bestFunctionValues, avgFunctionValues, standardDeviations);
+    }
+
+    private static Mode getMode(boolean isMaximization) {
+        return isMaximization ? Mode.MAXIMIZATION : Mode.MINIMIZATION;
     }
 
     private void saveToFile(Map<Integer, Double> map, String filename) {
@@ -97,7 +101,7 @@ public class GeneticServiceImpl implements GeneticService {
 
         File file = new File(String.format("results/%s_%s.csv", formattedDateTime, filename));
 
-        try{
+        try {
             file.createNewFile();
             PrintWriter pw = new PrintWriter(file);
             pw.println("generation,value");
@@ -116,7 +120,7 @@ public class GeneticServiceImpl implements GeneticService {
 
 
     private List<Candidate> eliteStrategy(List<FunctionResult> functionResults, int eliteStrategyAmount, Mode mode) {
-        // TODO: 30/10/2022 it should be always even number
+        eliteStrategyAmount = eliteStrategyAmount % 2 == 0 ? eliteStrategyAmount : eliteStrategyAmount + 1;
         return switch (mode) {
             case MINIMIZATION -> functionResults.stream()
                     .sorted()
@@ -149,18 +153,18 @@ public class GeneticServiceImpl implements GeneticService {
 
     private List<FunctionResult> evaluation(List<Candidate> candidates, BinaryOperator<Double> function) {
         return candidates.stream()
-                .map(candidate -> new FunctionResult(candidate, function)).toList();
+                .map(candidate -> new FunctionResult(candidate, function)).collect(Collectors.toList());
     }
 
-    private List<FunctionResult> selection(Selection selectionMethod, List<FunctionResult> functionResults) {
-
-        // TODO: 30/10/2022 add roulette method
+    private List<FunctionResult> selection(Selection selectionMethod, List<FunctionResult> functionResults, Mode mode,
+                                           Tournament tournament, int percentageOfBestElements, int tournamentSize, int spinNumber) {
 
         return switch (selectionMethod) {
-            case TOURNAMENT ->
-                    selection.tournamentMethod(functionResults, /*TODO*/ 10, /*TODO*/ Tournament.SINGLE, /*TODO*/Mode.MINIMIZATION);
-            case RANKING -> selection.rankingMethod(functionResults, /*TODO*/ Rank.MINIMUM_VALUE);
-            default -> selection.bestElementsMethod(functionResults, /*TODO*/ 0.3f, /*TODO*/Mode.MINIMIZATION);
+            case ROULETTE -> selection.rouletteMethod(functionResults, spinNumber, mode);
+            case TOURNAMENT -> selection.tournamentMethod(functionResults, tournamentSize, tournament, mode);
+            case RANKING ->
+                    selection.rankingMethod(functionResults, mode == Mode.MINIMIZATION ? Rank.MINIMUM_VALUE : Rank.MAXIMUM_VALUE);
+            default -> selection.bestElementsMethod(functionResults, percentageOfBestElements, mode);
 
         };
     }
