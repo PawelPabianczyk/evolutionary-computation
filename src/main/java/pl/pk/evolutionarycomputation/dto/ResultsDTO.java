@@ -1,5 +1,6 @@
 package pl.pk.evolutionarycomputation.dto;
 
-public class ResultsDTO {
-    // TODO: 30/10/2022 add implementation
+import java.util.Map;
+
+public record ResultsDTO(double calculationTime, Map<Integer, Double> bestFunctionValues, Map<Integer, Double> avgFunctionValues, Map<Integer, Double> standardDeviations) {
 }

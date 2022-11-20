@@ -11,6 +11,9 @@ import pl.pk.evolutionarycomputation.model.FunctionResult;
 import pl.pk.evolutionarycomputation.util.generator.ChromosomeGenerator;
 import pl.pk.evolutionarycomputation.util.selection.ISelection;
 
+import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
@@ -20,22 +23,24 @@ public class GeneticServiceImpl implements GeneticService {
 
     private final ChromosomeGenerator chromosomeGenerator;
     private final ISelection selection;
+    private final DateTimeFormatter formatter;
+
 
     public GeneticServiceImpl(ChromosomeGenerator chromosomeGenerator, ISelection selection) {
         this.chromosomeGenerator = chromosomeGenerator;
         this.selection = selection;
+        this.formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
     }
 
     @Override
     public ResultsDTO perform(GeneticAlgorithmConfigurationDTO dto) {
-
-        // TODO: 30/10/2022 add elite strategy
 
         BinaryOperator<Double> bealeFunction = (x1, x2) ->
                 Math.pow((1.5 - x1 + x1 * x2), 2) +
                         Math.pow((2.25 - x1 + x1 * Math.pow(x2, 2)), 2) +
                         Math.pow((2.625 - x1 + x1 * Math.pow(x2, 3)), 2);
 
+        long calculationStartTimestamp = System.currentTimeMillis();
 
         List<Candidate> candidates = initializePopulation(dto.getPopulationAmount(), dto.getRangeBegin(), dto.getRangeEnd());
 
@@ -44,11 +49,25 @@ public class GeneticServiceImpl implements GeneticService {
 
         List<Candidate> eliteCandidates;
 
+        Map<Integer, Double> bestFunctionValues = new HashMap<>();
+        Map<Integer, Double> avgFunctionValues = new HashMap<>();
+        Map<Integer, Double> standardDeviations = new HashMap<>();
+
+
         for (int i = 0; i < dto.getEpochsAmount(); i++) {
 
             functionResults = evaluation(candidates, bealeFunction);
 
+            avgFunctionValues.put(i + 1, functionResults.stream().mapToDouble(FunctionResult::getValue).average().getAsDouble());
+
+            final double avgFunctionValue = avgFunctionValues.values().stream().mapToDouble(Double::doubleValue).average().getAsDouble();
+
+            double sum = functionResults.stream().mapToDouble(FunctionResult::getValue).map(x -> Math.pow((x - avgFunctionValue), 2)).sum();
+            standardDeviations.put(i + 1, Math.sqrt(sum / functionResults.size()));
+
             eliteCandidates = eliteStrategy(functionResults, dto.getEliteStrategyAmount(), Mode.MINIMIZATION);
+
+            bestFunctionValues.put(i + 1, new FunctionResult(eliteCandidates.get(0), bealeFunction).getValue());
 
             functionResults = selection(dto.getSelectionMethod(), functionResults);
 
@@ -61,9 +80,40 @@ public class GeneticServiceImpl implements GeneticService {
             candidates.addAll(eliteCandidates);
         }
 
+        long calculationEndTimestamp = System.currentTimeMillis();
 
-        return new ResultsDTO(); //TODO
+        double calculationTime = (calculationEndTimestamp - calculationStartTimestamp) / 1000.0;
+
+        saveToFile(bestFunctionValues, "best_function_values");
+        saveToFile(avgFunctionValues, "avg_function_values");
+        saveToFile(standardDeviations, "standard_deviations");
+
+        return new ResultsDTO(calculationTime, bestFunctionValues, avgFunctionValues, standardDeviations); //TODO
     }
+
+    private void saveToFile(Map<Integer, Double> map, String filename) {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        String formattedDateTime = currentDateTime.format(formatter);
+
+        File file = new File(String.format("results/%s_%s.csv", formattedDateTime, filename));
+
+        try{
+            file.createNewFile();
+            PrintWriter pw = new PrintWriter(file);
+            pw.println("generation,value");
+            map.entrySet().stream()
+                    .map(this::convertToCSV)
+                    .forEach(pw::println);
+            pw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String convertToCSV(Map.Entry<Integer, Double> integerDoubleEntry) {
+        return integerDoubleEntry.getKey() + "," + integerDoubleEntry.getValue();
+    }
+
 
     private List<Candidate> eliteStrategy(List<FunctionResult> functionResults, int eliteStrategyAmount, Mode mode) {
         // TODO: 30/10/2022 it should be always even number

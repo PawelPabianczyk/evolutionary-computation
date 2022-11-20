@@ -5,15 +5,15 @@ import pl.pk.evolutionarycomputation.enums.Mutation;
 import pl.pk.evolutionarycomputation.enums.Selection;
 
 public class GeneticAlgorithmConfigurationDTO {
-    private final int rangeBegin = 3;
+    private final int rangeBegin = -5;
     private final int rangeEnd = 5;
-    private final int populationAmount = 1000;
-    private final int epochsAmount = 20;
+    private final int populationAmount = 100;
+    private final int epochsAmount = 100;
     private final int chromosomeAmount = 10;
-    private final int eliteStrategyAmount = 12;
-    private final int crossProbability = 30;
-    private final int mutationProbability = 60;
-    private final int inversionProbability = 20;
+    private final int eliteStrategyAmount = 10;
+    private final int crossProbability = 60;
+    private final int mutationProbability = 40;
+    private final int inversionProbability = 10;
     private final Selection selectionMethod = Selection.BEST_ELEMENTS;
     private final Crossover crossMethod = Crossover.ONE_POINT;
     private final Mutation mutationMethod = Mutation.ONE_POINT;

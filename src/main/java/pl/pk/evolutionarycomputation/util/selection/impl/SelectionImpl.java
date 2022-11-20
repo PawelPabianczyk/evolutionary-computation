@@ -33,6 +33,8 @@ public class SelectionImpl implements ISelection {
 
     @Override
     public Map<FunctionResult, Double> rouletteMethod(List<FunctionResult> functionResults, Mode mode) {
+        // TODO: 30/10/2022 add how many times we need to spin the wheel
+
         double sum;
 
         if (mode.equals(Mode.MINIMIZATION)) {
