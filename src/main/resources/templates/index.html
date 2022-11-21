@@ -85,90 +85,90 @@
                 </div>
                 <hr class="border-primary">
                 <div class="row d-flex justify-content-center">
-                <fieldset class="form-group  border-right border-primary m-2">
-                    <div class="row mb-3">
-                        <legend class="col-form-label col-sm-4"><b>Selection Method</b></legend>
-                        <div class="col-sm-8">
-                            <div class="form-check">
-                                <input th:field="*{selectionMethod}" class="form-check-input" type="radio" name="selection" id="best"
-                                       value="best" checked>
-                                <label class="form-check-label" for="best">
-                                    Best
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input th:field="*{selectionMethod}" class="form-check-input" type="radio" name="selection" id="roulette"
-                                       value="roulette">
-                                <label class="form-check-label" for="roulette">
-                                    Roulette
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input th:field="*{selectionMethod}" class="form-check-input" type="radio" name="selection" id="tournament"
-                                       value="tournament">
-                                <label class="form-check-label" for="tournament">
-                                    Tournament
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </fieldset>
-                <fieldset class="form-group border-right border-primary m-2">
-                    <div class="row mb-3">
-                        <legend class="col-form-label col-sm-4"><b>Cross Method</b></legend>
-                        <div class="col-sm-8">
-                            <div class="form-check">
-                                <input th:field="*{crossMethod}" class="form-check-input" type="radio" name="cross" id="cross-one"
-                                       value="cross-one" checked>
-                                <label class="form-check-label" for="cross-one">
-                                    One Point
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input th:field="*{crossMethod}" class="form-check-input" type="radio" name="cross" id="cross-two"
-                                       value="cross-two">
-                                <label class="form-check-label" for="cross-two">
-                                    Two Points
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input th:field="*{crossMethod}" class="form-check-input" type="radio" name="cross" id="cross-three"
-                                       value="cross-three">
-                                <label class="form-check-label" for="cross-three">
-                                    Three Points
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input th:field="*{crossMethod}" class="form-check-input" type="radio" name="gridRadios1" id="cross-homo"
-                                       value="cross-homo">
-                                <label class="form-check-label" for="cross-homo">
-                                    Homo
-                                </label>
+                    <fieldset class="form-group  border-right border-primary m-2">
+                        <div class="row mb-3">
+                            <legend class="col-form-label col-sm-4"><b>Selection Method</b></legend>
+                            <div class="col-sm-8">
+                                <div class="form-check">
+                                    <input th:field="*{selectionMethod}" class="form-check-input" type="radio" name="selection" id="best"
+                                           value="best" checked>
+                                    <label class="form-check-label" for="best">
+                                        Best
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input th:field="*{selectionMethod}" class="form-check-input" type="radio" name="selection" id="roulette"
+                                           value="roulette">
+                                    <label class="form-check-label" for="roulette">
+                                        Roulette
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input th:field="*{selectionMethod}" class="form-check-input" type="radio" name="selection" id="tournament"
+                                           value="tournament">
+                                    <label class="form-check-label" for="tournament">
+                                        Tournament
+                                    </label>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </fieldset>
-                <fieldset class="form-group m-2">
-                    <div class="row mb-3">
-                        <legend class="col-form-label col-sm-4"><b>Mutation Method</b></legend>
-                        <div class="col-sm-8">
-                            <div class="form-check">
-                                <input th:field="*{mutationMethod}" class="form-check-input" type="radio" name="mutation" id="mutation-one"
-                                       value="mutation-one">
-                                <label class="form-check-label" for="mutation-one">
-                                    One Point
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input th:field="*{mutationMethod}" class="form-check-input" type="radio" name="mutation" id="mutation-two"
-                                       value="mutation-two" checked>
-                                <label class="form-check-label" for="mutation-two">
-                                    Two Points
-                                </label>
+                    </fieldset>
+                    <fieldset class="form-group border-right border-primary m-2">
+                        <div class="row mb-3">
+                            <legend class="col-form-label col-sm-4"><b>Cross Method</b></legend>
+                            <div class="col-sm-8">
+                                <div class="form-check">
+                                    <input th:field="*{crossMethod}" class="form-check-input" type="radio" name="cross" id="ONE_POINT"
+                                           value="ONE_POINT" checked>
+                                    <label class="form-check-label" for="ONE_POINT">
+                                        One Point
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input th:field="*{crossMethod}" class="form-check-input" type="radio" name="cross" id="TWO_POINT"
+                                           value="TWO_POINT">
+                                    <label class="form-check-label" for="TWO_POINT">
+                                        Two Points
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input th:field="*{crossMethod}" class="form-check-input" type="radio" name="cross" id="THREE_POINT"
+                                           value="THREE_POINT">
+                                    <label class="form-check-label" for="THREE_POINT">
+                                        Three Points
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input th:field="*{crossMethod}" class="form-check-input" type="radio" name="gridRadios1" id="UNIFORM"
+                                           value="UNIFORM">
+                                    <label class="form-check-label" for="UNIFORM">
+                                        Homo
+                                    </label>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </fieldset>
+                    </fieldset>
+                    <fieldset class="form-group m-2">
+                        <!--                    <div class="row mb-3">-->
+                        <!--                        <legend class="col-form-label col-sm-4"><b>Mutation Method</b></legend>-->
+                        <!--                        <div class="col-sm-8">-->
+                        <!--                            <div class="form-check">-->
+                        <!--                                <input th:field="*{mutationMethod}" class="form-check-input" type="radio" name="mutation" id="ONE_POINT"-->
+                        <!--                                       value="ONE_POINT">-->
+                        <!--                                <label class="form-check-label" for="ONE_POINT">-->
+                        <!--                                    One Point-->
+                        <!--                                </label>-->
+                        <!--                            </div>-->
+                        <!--                            <div class="form-check">-->
+                        <!--                                <input th:field="*{mutationMethod}" class="form-check-input" type="radio" name="mutation" id="mutation-two"-->
+                        <!--                                       value="mutation-two" checked>-->
+                        <!--                                <label class="form-check-label" for="mutation-two">-->
+                        <!--                                    Two Points-->
+                        <!--                                </label>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                        <!--                    </div>-->
+                    </fieldset>
                 </div>
                 <hr class="border-primary">
                 <div class="form-group row">

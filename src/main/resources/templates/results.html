@@ -16,21 +16,36 @@
             crossorigin="anonymous"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
-<body class="h-100">
-    <div class="container h-100 d-flex justify-content-center align-items-center flex-column">
-        <h1 class="mb-5">Chart</h1>
-        <div class="mb-5" id="chart" style="width:90%;height:50%;"></div>
+<body>
+    <div class="container">
+        <h1>Chart</h1>
+        <div id="chartBest"></div>
+        <div id="chartAvg"></div>
+        <div id="chartStd"></div>
+
         <div class="d-flex flex-row w-25 align-items-center">
             <h4 class="mr-2">Time: </h4>
             <h5 style="color: cornflowerblue;">4.323 ms</h5>
         </div>
     </div>
     <script th:inline="javascript">
-        let generation = "[[${generation}]]";
-        generation = generation.replaceAll('[', '').replaceAll(']', '').split(',');
-        let value = "[[${value}]]";
-        value = value.replaceAll('[', '').replaceAll(']', '').split(',');
-        let linearChart = "[[${linearChart}]]" === 'true';
+        let generationBest = "[[${generationBest}]]";
+        generationBest = generationBest.replaceAll('[', '').replaceAll(']', '').split(',');
+        let valueBest = "[[${valueBest}]]";
+        valueBest = valueBest.replaceAll('[', '').replaceAll(']', '').split(',');
+        let linearChartBest = "[[${linearChartBest}]]" === 'true';
+
+        let generationAvg = "[[${generationAvg}]]";
+        generationAvg = generationAvg.replaceAll('[', '').replaceAll(']', '').split(',');
+        let valueAvg = "[[${valueAvg}]]";
+        valueAvg = valueAvg.replaceAll('[', '').replaceAll(']', '').split(',');
+        let linearChartAvg = "[[${linearChartAvg}]]" === 'true';
+
+        let generationStd = "[[${generationStd}]]";
+        generationStd = generationStd.replaceAll('[', '').replaceAll(']', '').split(',');
+        let valueStd = "[[${valueStd}]]";
+        valueStd = valueStd.replaceAll('[', '').replaceAll(']', '').split(',');
+        let linearChartStd = "[[${linearChartStd}]]" === 'true';
     </script>
     <script type="text/javascript" th:src="@{/js/script.js}"></script>
 </body>
