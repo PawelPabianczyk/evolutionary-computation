@@ -19,7 +19,7 @@ public class SelectionImpl implements ISelection {
 
     @Override
     public List<FunctionResult> bestElementsMethod(List<FunctionResult> functionResults, int percentageOfBestElements, Mode mode) {
-        int numberOfChromosomes = (int) Math.ceil(functionResults.size() * (percentageOfBestElements/100));
+        int numberOfChromosomes = (int) Math.ceil(functionResults.size() * (percentageOfBestElements/100.0));
 
         return switch (mode) {
             case MINIMIZATION -> sortAsc(functionResults).stream()
