@@ -33,11 +33,16 @@ public class BasicController {
     @RequestMapping(value = "/index", method = RequestMethod.POST)
     public String sendFormData(@RequestBody String body, Model model) {
         String[] parts = body.split("&");
-        int rangeBegin = 0, rangeEnd = 0, populationAmount = 0, epochsAmount = 0, chromosomeAmount = 0, eliteStrategyAmount= 0, crossProbability=0, mutationProbability=0, inversionProbability=0;
+        int rangeBegin = 0, rangeEnd = 0, populationAmount = 0, epochsAmount = 0, chromosomeAmount = 0, eliteStrategyAmount= 0, crossProbability=0, mutationProbability=0, inversionProbability=0, percentageOfBestElements = 0, tournamentSize = 0, spinNumber = 0;
         boolean maximization = false;
-        String selectionMethod = null, crossMethod = null;
+        String selectionMethod = null, crossMethod = null, mutationMethodStr = null;
         Mutation mutationMethod = Mutation.ONE_POINT;
-        if(parts.length == 13) {
+
+        if(parts.length == 17) {
+            maximization = true;
+        }
+
+        if(parts.length >= 16) {
             String[] tempParts = parts[0].split("=");
             rangeBegin = Integer.parseInt(tempParts[1]);
 
@@ -66,19 +71,22 @@ public class BasicController {
             inversionProbability = Integer.parseInt(tempParts[1]);
 
             tempParts = parts[9].split("=");
-            selectionMethod = tempParts[1];
+            percentageOfBestElements = Integer.parseInt(tempParts[1]);
 
             tempParts = parts[10].split("=");
-            crossMethod = tempParts[1];
+            tournamentSize = Integer.parseInt(tempParts[1]);
 
             tempParts = parts[11].split("=");
-            String tempStr  = tempParts[1];
+            spinNumber = Integer.parseInt(tempParts[1]);
 
-            if(tempStr.equals("true")) {
-                maximization = true;
-            } else {
-                maximization = false;
-            }
+            tempParts = parts[12].split("=");
+            selectionMethod = tempParts[1];
+
+            tempParts = parts[13].split("=");
+            crossMethod = tempParts[1];
+
+            tempParts = parts[14].split("=");
+            mutationMethodStr  = tempParts[1];
         }
         else {
             System.out.println("Error: all data required!");
@@ -100,12 +108,15 @@ public class BasicController {
             case "UNIFORM" -> crossover = Crossover.UNIFORM;
         }
 
-        Tournament tournament = Tournament.SINGLE;
-        int percentageOfBestElements = 30;
-        int tournamentSize = 10;
-        int spinNumber = 30;
+        switch (mutationMethodStr) {
+            case "ONE_POINT" -> mutation = Mutation.ONE_POINT;
+            case "TWO_POINT" -> mutation = Mutation.TWO_POINT;
+        }
 
-        GeneticAlgorithmConfigurationDTO geneticAlgorithmConfigurationDTO = new GeneticAlgorithmConfigurationDTO(rangeBegin, rangeEnd, populationAmount, epochsAmount, chromosomeAmount, eliteStrategyAmount, crossProbability, mutationProbability, inversionProbability,selection,crossover,mutationMethod,tournament, maximization, percentageOfBestElements, tournamentSize, spinNumber);
+
+        Tournament tournament = Tournament.SINGLE;
+
+        GeneticAlgorithmConfigurationDTO geneticAlgorithmConfigurationDTO = new GeneticAlgorithmConfigurationDTO(rangeBegin, rangeEnd, populationAmount, epochsAmount, chromosomeAmount, eliteStrategyAmount, crossProbability, mutationProbability, inversionProbability,selection,crossover,mutation,tournament, maximization, percentageOfBestElements, tournamentSize, spinNumber);
         ResultsDTO resultsDTO = geneticService.perform(geneticAlgorithmConfigurationDTO);
         return results(model, resultsDTO);
     }

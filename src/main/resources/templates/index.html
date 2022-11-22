@@ -83,22 +83,45 @@
                                placeholder="Inversion probability">
                     </div>
                 </div>
+
+
+
+                <div class="form-group row">
+                    <div class="col-sm-10 d-flex w-100 justify-content-around">
+                        <label for="inversion-probability" class="w-50">Percentage of best elements: </label>
+                        <input th:field="*{percentageOfBestElements}" id="percentageOfBestElements" type="number" class="form-control w-25"
+                               placeholder="Percentage of best elements">
+                    </div>
+                </div><div class="form-group row">
+                <div class="col-sm-10 d-flex w-100 justify-content-around">
+                    <label for="inversion-probability" class="w-50">Tournament size: </label>
+                    <input th:field="*{tournamentSize}" id="tournamentSize" type="number" class="form-control w-25"
+                           placeholder="Tournament size">
+                </div>
+            </div><div class="form-group row">
+                <div class="col-sm-10 d-flex w-100 justify-content-around">
+                    <label for="inversion-probability" class="w-50">Spin number: </label>
+                    <input th:field="*{spinNumber}" id="spinNumber" type="number" class="form-control w-25"
+                           placeholder="Spin number">
+                </div>
+            </div>
+
                 <hr class="border-primary">
                 <div class="row d-flex justify-content-center">
-                    <fieldset class="form-group  border-right border-primary m-2">
+                    <fieldset class="form-group border-right border-primary m-2">
                         <div class="row mb-3">
                             <legend class="col-form-label col-sm-4"><b>Selection Method</b></legend>
                             <div class="col-sm-8">
                                 <div class="form-check">
                                     <input th:field="*{selectionMethod}" class="form-check-input" type="radio" name="selection" id="best"
-                                           value="best" checked>
+                                           value="best" >
                                     <label class="form-check-label" for="best">
                                         Best
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <input th:field="*{selectionMethod}" class="form-check-input" type="radio" name="selection" id="roulette"
-                                           value="roulette">
+                                           value="roulette" checked>
                                     <label class="form-check-label" for="roulette">
                                         Roulette
                                     </label>
@@ -149,25 +172,25 @@
                         </div>
                     </fieldset>
                     <fieldset class="form-group m-2">
-                        <!--                    <div class="row mb-3">-->
-                        <!--                        <legend class="col-form-label col-sm-4"><b>Mutation Method</b></legend>-->
-                        <!--                        <div class="col-sm-8">-->
-                        <!--                            <div class="form-check">-->
-                        <!--                                <input th:field="*{mutationMethod}" class="form-check-input" type="radio" name="mutation" id="ONE_POINT"-->
-                        <!--                                       value="ONE_POINT">-->
-                        <!--                                <label class="form-check-label" for="ONE_POINT">-->
-                        <!--                                    One Point-->
-                        <!--                                </label>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="form-check">-->
-                        <!--                                <input th:field="*{mutationMethod}" class="form-check-input" type="radio" name="mutation" id="mutation-two"-->
-                        <!--                                       value="mutation-two" checked>-->
-                        <!--                                <label class="form-check-label" for="mutation-two">-->
-                        <!--                                    Two Points-->
-                        <!--                                </label>-->
-                        <!--                            </div>-->
-                        <!--                        </div>-->
-                        <!--                    </div>-->
+                                            <div class="row mb-3">
+                                                <legend class="col-form-label col-sm-4"><b>Mutation Method</b></legend>
+                                                <div class="col-sm-8">
+                                                    <div class="form-check">
+                                                        <input th:field="*{mutationMethod}" class="form-check-input" type="radio" name="mutation" id="mutation-one"
+                                                               value="ONE_POINT">
+                                                        <label class="form-check-label" for="ONE_POINT">
+                                                            One Point
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input th:field="*{mutationMethod}" class="form-check-input" type="radio" name="mutation" id="mutation-two"
+                                                               value="TWO_POINT" checked>
+                                                        <label class="form-check-label" for="TWO_POINT">
+                                                            Two Points
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
                     </fieldset>
                 </div>
                 <hr class="border-primary">
@@ -190,5 +213,8 @@
         </div>
     </div>
 </div>
+<script>
+    document.querySelector('#best').checked = true;
+</script>
 </body>
 </html>
