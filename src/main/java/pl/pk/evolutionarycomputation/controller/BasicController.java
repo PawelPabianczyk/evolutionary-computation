@@ -100,6 +100,7 @@ public class BasicController {
             case "best" -> selection = Selection.BEST_ELEMENTS;
             case "roulette" -> selection = Selection.ROULETTE;
             case "tournament" -> selection = Selection.TOURNAMENT;
+            case "ranking" -> selection = Selection.RANKING;
         }
         switch (crossMethod) {
             case "ONE_POINT" -> crossover = Crossover.ONE_POINT;
