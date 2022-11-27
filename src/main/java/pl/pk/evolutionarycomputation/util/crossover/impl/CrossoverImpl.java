@@ -36,15 +36,9 @@ public class CrossoverImpl implements ICrossover {
 
                     double newX1 = k * x1 + (1 - k) * x2;
                     double newY1 = k * y1 + (1 - k) * y2;
-                    if (isRangeInCorrect(newX1, newY1, minimumValue, maximumValue)){
-                        break;
-                    }
 
                     double newX2 = (1 - k) * x1 + k * x2;
                     double newY2 = (1 - k) * y1 + k * y2;
-                    if (isRangeInCorrect(newX2, newY2, minimumValue, maximumValue)){
-                        break;
-                    }
 
                     newCandidates.add(createNewCandidate(newX1, newY1, minimumValue, maximumValue));
                     newCandidates.add(createNewCandidate(newX2, newY2, minimumValue, maximumValue));
@@ -76,42 +70,51 @@ public class CrossoverImpl implements ICrossover {
 
 
                     double newX1 = x1 / 2 + x2 / 2;
+                    if (isRangeInCorrect(newX1, minimumValue, maximumValue))
+                        break;
+
                     double newY1 = y1 / 2 + y2 / 2;
 
-                    if (isRangeInCorrect(newX1, newY1, minimumValue, maximumValue)){
+                    if (isRangeInCorrect(newY1, minimumValue, maximumValue))
                         break;
-                    }
+
 
                     Candidate z = createNewCandidate(newX1, newY1, minimumValue, maximumValue);
 
                     double newX2 = 3 * x1 / 2 - x2 / 2;
-                    double newY2 = 3 * y1 / 2 + y2 / 2;
-
-                    if (isRangeInCorrect(newX2, newY2, minimumValue, maximumValue)){
+                    if (isRangeInCorrect(newX2, minimumValue, maximumValue))
                         break;
 
-                    }
+
+                    double newY2 = 3 * y1 / 2 + y2 / 2;
+
+                    if (isRangeInCorrect(newY2, minimumValue, maximumValue))
+                        break;
+
 
                     Candidate v = createNewCandidate(newX2, newY2, minimumValue, maximumValue);
 
                     double newX3 = 3 * x2 / 2 - x1 / 2;
+                    if (isRangeInCorrect(newX3, minimumValue, maximumValue))
+                        break;
+
                     double newY3 = 3 * y2 / 2 + y1 / 2;
 
-                    if (isRangeInCorrect(newX3, newY3, minimumValue, maximumValue)){
+                    if (isRangeInCorrect(newY3, minimumValue, maximumValue))
                         break;
-                    }
+
 
                     Candidate w = createNewCandidate(newX3, newY3, minimumValue, maximumValue);
 
-                    newCandidates.addAll(getBestTwo(asList(z,v,w),function,mode));
+                    newCandidates.addAll(getBestTwo(asList(z, v, w), function, mode));
                 }
             }
         }
         return newCandidates.stream().limit(populationAmount).collect(Collectors.toList());
     }
 
-    private boolean isRangeInCorrect(double x, double y, int minimumValue, int maximumValue) {
-        return x<minimumValue || x>maximumValue || y<minimumValue || y>maximumValue;
+    private boolean isRangeInCorrect(double value, int minimumValue, int maximumValue) {
+        return value < minimumValue || value > maximumValue;
     }
 
     private List<Candidate> getBestTwo(List<Candidate> candidates, BinaryOperator<Double> function, Mode mode) {
@@ -131,17 +134,74 @@ public class CrossoverImpl implements ICrossover {
     }
 
     @Override
-    public List<Candidate> blendCrossoverAlpha(List<Candidate> candidates, int populationAmount, int probability) {
-        return null;
+    public List<Candidate> blendCrossoverAlpha(List<Candidate> candidates, int populationAmount, int probability, double alpha) {
+        return blendCrossoverAlphaAndBeta(candidates, populationAmount, probability, alpha, alpha);
     }
 
     @Override
-    public List<Candidate> blendCrossoverAlphaAndBeta(List<Candidate> candidates, int populationAmount, int probability) {
-        return null;
+    public List<Candidate> blendCrossoverAlphaAndBeta(List<Candidate> candidates, int populationAmount, int probability, double alpha, double beta) {
+        List<Candidate> newCandidates = new ArrayList<>();
+        while (newCandidates.size() < populationAmount) {
+            Collections.shuffle(candidates);
+            int minimumValue = candidates.get(0).getChromosomes().get(0).getMinimumValue();
+            int maximumValue = candidates.get(0).getChromosomes().get(0).getMaximumValue();
+            for (int i = 1; i < candidates.size(); i += 2) {
+                if (ThreadLocalRandom.current().nextInt(1, 101) <= probability) {
+                    List<Chromosome> can1Chromosomes = candidates.get(i - 1).getChromosomes();
+                    double x1 = can1Chromosomes.get(0).getValue();
+                    double y1 = can1Chromosomes.get(1).getValue();
+                    List<Chromosome> can2Chromosomes = candidates.get(i).getChromosomes();
+                    double x2 = can2Chromosomes.get(0).getValue();
+                    double y2 = can2Chromosomes.get(1).getValue();
+
+
+                    double newX1 = ThreadLocalRandom.current().nextDouble(Math.min(x1, x2) - alpha * Math.abs(x1 - x2), Math.max(x1, x2) + beta * Math.abs(x1 - x2));
+                    if (isRangeInCorrect(newX1, minimumValue, maximumValue))
+                        break;
+
+                    double newY1 = ThreadLocalRandom.current().nextDouble(Math.min(y1, y2) - alpha * Math.abs(y1 - y2), Math.max(y1, y2) + beta * Math.abs(y1 - y2));
+                    if (isRangeInCorrect(newY1, minimumValue, maximumValue))
+                        break;
+
+                    double newX2 = ThreadLocalRandom.current().nextDouble(Math.min(x1, x2) - alpha * Math.abs(x1 - x2), Math.max(x1, x2) + beta * Math.abs(x1 - x2));
+                    if (isRangeInCorrect(newX2, minimumValue, maximumValue))
+                        break;
+
+                    double newY2 = ThreadLocalRandom.current().nextDouble(Math.min(y1, y2) - alpha * Math.abs(y1 - y2), Math.max(y1, y2) + beta * Math.abs(y1 - y2));
+                    if (isRangeInCorrect(newY2, minimumValue, maximumValue))
+                        break;
+
+                    newCandidates.add(createNewCandidate(newX1, newY1, minimumValue, maximumValue));
+                    newCandidates.add(createNewCandidate(newX2, newY2, minimumValue, maximumValue));
+                }
+            }
+        }
+        return newCandidates.stream().limit(populationAmount).collect(Collectors.toList());
     }
 
     @Override
     public List<Candidate> averageCrossover(List<Candidate> candidates, int populationAmount, int probability) {
-        return null;
+        List<Candidate> newCandidates = new ArrayList<>();
+        while (newCandidates.size() < populationAmount) {
+            Collections.shuffle(candidates);
+            int minimumValue = candidates.get(0).getChromosomes().get(0).getMinimumValue();
+            int maximumValue = candidates.get(0).getChromosomes().get(0).getMaximumValue();
+            for (int i = 1; i < candidates.size(); i += 2) {
+                if (ThreadLocalRandom.current().nextInt(1, 101) <= probability) {
+                    List<Chromosome> can1Chromosomes = candidates.get(i - 1).getChromosomes();
+                    double x1 = can1Chromosomes.get(0).getValue();
+                    double y1 = can1Chromosomes.get(1).getValue();
+                    List<Chromosome> can2Chromosomes = candidates.get(i).getChromosomes();
+                    double x2 = can2Chromosomes.get(0).getValue();
+                    double y2 = can2Chromosomes.get(1).getValue();
+
+                    double newX = (x1 + x2) / 2;
+                    double newY = (y1 + y2) / 2;
+
+                    newCandidates.add(createNewCandidate(newX, newY, minimumValue, maximumValue));
+                }
+            }
+        }
+        return newCandidates.stream().limit(populationAmount).collect(Collectors.toList());
     }
 }

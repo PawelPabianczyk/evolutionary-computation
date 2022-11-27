@@ -12,9 +12,9 @@ public interface ICrossover {
 
     List<Candidate> linearCrossover(List<Candidate> candidates, int populationAmount, int probability, BinaryOperator<Double> function, Mode mode);
 
-    List<Candidate> blendCrossoverAlpha(List<Candidate> candidates, int populationAmount, int probability);
+    List<Candidate> blendCrossoverAlpha(List<Candidate> candidates, int populationAmount, int probability, double alpha);
 
-    List<Candidate> blendCrossoverAlphaAndBeta(List<Candidate> candidates, int populationAmount, int probability);
+    List<Candidate> blendCrossoverAlphaAndBeta(List<Candidate> candidates, int populationAmount, int probability, double alpha, double beta);
 
     List<Candidate> averageCrossover(List<Candidate> candidates, int populationAmount, int probability);
 }
