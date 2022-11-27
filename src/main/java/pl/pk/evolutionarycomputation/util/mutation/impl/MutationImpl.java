@@ -12,7 +12,7 @@ public class MutationImpl implements IMutation {
     }
 
     @Override
-    public List<Candidate> GaussMutation(List<Candidate> candidates, int probability) {
+    public List<Candidate> gaussMutation(List<Candidate> candidates, int probability) {
         return null;
     }
 }

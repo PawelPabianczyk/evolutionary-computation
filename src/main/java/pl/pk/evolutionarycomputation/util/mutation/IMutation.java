@@ -8,5 +8,5 @@ public interface IMutation {
 
     List<Candidate> uniformMutation(List<Candidate> candidates, int probability);
 
-    List<Candidate> GaussMutation(List<Candidate> candidates, int probability);
+    List<Candidate> gaussMutation(List<Candidate> candidates, int probability);
 }
