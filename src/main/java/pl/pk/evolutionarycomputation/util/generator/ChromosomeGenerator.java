@@ -13,7 +13,7 @@ import static pl.pk.evolutionarycomputation.binary.BinaryCalculator.getLengthOfC
 public class ChromosomeGenerator {
 
     public List<Chromosome> generateChromosomesBinary(int numberOfElements, int minimumValue, int maximumValue) {
-        List<Chromosome> chromosomes= new LinkedList<>();
+        List<Chromosome> chromosomes = new LinkedList<>();
         int lengthOfChromosome = getLengthOfChromosome(minimumValue, maximumValue);
 
         for (int i = 0; i < numberOfElements; i++) {
@@ -23,6 +23,16 @@ public class ChromosomeGenerator {
             }
             chromosomes.add(new Chromosome(bytesRepresentation, minimumValue, maximumValue));
         }
+        return chromosomes;
+    }
+
+    public List<Chromosome> generateChromosomes(int numberOfElements, int minimumValue, int maximumValue) {
+        List<Chromosome> chromosomes = new LinkedList<>();
+
+        for (int i = 0; i < numberOfElements; i++) {
+            chromosomes.add(new Chromosome(ThreadLocalRandom.current().nextDouble(minimumValue, maximumValue), minimumValue, maximumValue));
+        }
+
         return chromosomes;
     }
 }

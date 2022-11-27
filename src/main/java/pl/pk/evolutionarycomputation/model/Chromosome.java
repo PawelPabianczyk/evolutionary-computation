@@ -21,4 +21,13 @@ public class Chromosome {
         this.binaryRepresentation = binaryRepresentation;
         value = decodeBinaryNumber(minimumValue, maximumValue, binaryRepresentation.length, getDecimal(binaryRepresentation));
     }
+
+    public Chromosome(double value, int minimumValue, int maximumValue) {
+        this.minimumValue = minimumValue;
+        this.maximumValue = maximumValue;
+        this.binaryRepresentation = null;
+        this.value = value;
+    }
+
+
 }
