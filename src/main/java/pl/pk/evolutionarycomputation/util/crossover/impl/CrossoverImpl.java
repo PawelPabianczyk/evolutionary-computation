@@ -36,9 +36,15 @@ public class CrossoverImpl implements ICrossover {
 
                     double newX1 = k * x1 + (1 - k) * x2;
                     double newY1 = k * y1 + (1 - k) * y2;
+                    if (isRangeInCorrect(newX1, newY1, minimumValue, maximumValue)){
+                        break;
+                    }
 
                     double newX2 = (1 - k) * x1 + k * x2;
                     double newY2 = (1 - k) * y1 + k * y2;
+                    if (isRangeInCorrect(newX2, newY2, minimumValue, maximumValue)){
+                        break;
+                    }
 
                     newCandidates.add(createNewCandidate(newX1, newY1, minimumValue, maximumValue));
                     newCandidates.add(createNewCandidate(newX2, newY2, minimumValue, maximumValue));
@@ -71,14 +77,30 @@ public class CrossoverImpl implements ICrossover {
 
                     double newX1 = x1 / 2 + x2 / 2;
                     double newY1 = y1 / 2 + y2 / 2;
+
+                    if (isRangeInCorrect(newX1, newY1, minimumValue, maximumValue)){
+                        break;
+                    }
+
                     Candidate z = createNewCandidate(newX1, newY1, minimumValue, maximumValue);
 
                     double newX2 = 3 * x1 / 2 - x2 / 2;
                     double newY2 = 3 * y1 / 2 + y2 / 2;
+
+                    if (isRangeInCorrect(newX2, newY2, minimumValue, maximumValue)){
+                        break;
+
+                    }
+
                     Candidate v = createNewCandidate(newX2, newY2, minimumValue, maximumValue);
 
                     double newX3 = 3 * x2 / 2 - x1 / 2;
                     double newY3 = 3 * y2 / 2 + y1 / 2;
+
+                    if (isRangeInCorrect(newX3, newY3, minimumValue, maximumValue)){
+                        break;
+                    }
+
                     Candidate w = createNewCandidate(newX3, newY3, minimumValue, maximumValue);
 
                     newCandidates.addAll(getBestTwo(asList(z,v,w),function,mode));
@@ -86,6 +108,10 @@ public class CrossoverImpl implements ICrossover {
             }
         }
         return newCandidates.stream().limit(populationAmount).collect(Collectors.toList());
+    }
+
+    private boolean isRangeInCorrect(double x, double y, int minimumValue, int maximumValue) {
+        return x<minimumValue || x>maximumValue || y<minimumValue || y>maximumValue;
     }
 
     private List<Candidate> getBestTwo(List<Candidate> candidates, BinaryOperator<Double> function, Mode mode) {
