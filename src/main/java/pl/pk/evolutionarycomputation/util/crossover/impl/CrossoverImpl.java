@@ -13,195 +13,214 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
+import static pl.pk.evolutionarycomputation.util.Commons.isRangeIncorrect;
 
 @Component
 public class CrossoverImpl implements ICrossover {
-    @Override
-    public List<Candidate> arithmeticCrossover(List<Candidate> candidates, int populationAmount, int probability) {
-        List<Candidate> newCandidates = new ArrayList<>();
-        while (newCandidates.size() < populationAmount) {
-            Collections.shuffle(candidates);
-            int minimumValue = candidates.get(0).getChromosomes().get(0).getMinimumValue();
-            int maximumValue = candidates.get(0).getChromosomes().get(0).getMaximumValue();
-            for (int i = 1; i < candidates.size(); i += 2) {
-                if (ThreadLocalRandom.current().nextInt(1, 101) <= probability) {
-                    List<Chromosome> can1Chromosomes = candidates.get(i - 1).getChromosomes();
-                    double x1 = can1Chromosomes.get(0).getValue();
-                    double y1 = can1Chromosomes.get(1).getValue();
-                    List<Chromosome> can2Chromosomes = candidates.get(i).getChromosomes();
-                    double x2 = can2Chromosomes.get(0).getValue();
-                    double y2 = can2Chromosomes.get(1).getValue();
 
-                    double k = ThreadLocalRandom.current().nextDouble(1);
+  @Override
+  public List<Candidate> arithmeticCrossover(List<Candidate> candidates, int populationAmount,
+      int probability) {
+    List<Candidate> newCandidates = new ArrayList<>();
+    while (newCandidates.size() < populationAmount) {
+      Collections.shuffle(candidates);
+      int minimumValue = candidates.get(0).getChromosomes().get(0).getMinimumValue();
+      int maximumValue = candidates.get(0).getChromosomes().get(0).getMaximumValue();
+      for (int i = 1; i < candidates.size(); i += 2) {
+        if (ThreadLocalRandom.current().nextInt(1, 101) <= probability) {
+          List<Chromosome> can1Chromosomes = candidates.get(i - 1).getChromosomes();
+          double x1 = can1Chromosomes.get(0).getValue();
+          double y1 = can1Chromosomes.get(1).getValue();
+          List<Chromosome> can2Chromosomes = candidates.get(i).getChromosomes();
+          double x2 = can2Chromosomes.get(0).getValue();
+          double y2 = can2Chromosomes.get(1).getValue();
 
-                    double newX1 = k * x1 + (1 - k) * x2;
-                    double newY1 = k * y1 + (1 - k) * y2;
+          double k = ThreadLocalRandom.current().nextDouble(1);
 
-                    double newX2 = (1 - k) * x1 + k * x2;
-                    double newY2 = (1 - k) * y1 + k * y2;
+          double newX1 = k * x1 + (1 - k) * x2;
+          double newY1 = k * y1 + (1 - k) * y2;
 
-                    newCandidates.add(createNewCandidate(newX1, newY1, minimumValue, maximumValue));
-                    newCandidates.add(createNewCandidate(newX2, newY2, minimumValue, maximumValue));
-                }
-            }
+          double newX2 = (1 - k) * x1 + k * x2;
+          double newY2 = (1 - k) * y1 + k * y2;
+
+          newCandidates.add(createNewCandidate(newX1, newY1, minimumValue, maximumValue));
+          newCandidates.add(createNewCandidate(newX2, newY2, minimumValue, maximumValue));
         }
-        return newCandidates.stream().limit(populationAmount).collect(Collectors.toList());
+      }
     }
+    return newCandidates.stream().limit(populationAmount).collect(Collectors.toList());
+  }
 
-    private Candidate createNewCandidate(double x, double y, int minimumValue, int maximumValue) {
-        return new Candidate(asList(new Chromosome(x, minimumValue, maximumValue), new Chromosome(y, minimumValue, maximumValue)));
-    }
+  private Candidate createNewCandidate(double x, double y, int minimumValue, int maximumValue) {
+    return new Candidate(asList(new Chromosome(x, minimumValue, maximumValue),
+        new Chromosome(y, minimumValue, maximumValue)));
+  }
 
-    @Override
-    public List<Candidate> linearCrossover(List<Candidate> candidates, int populationAmount, int probability, BinaryOperator<Double> function, Mode mode) {
-        List<Candidate> newCandidates = new ArrayList<>();
-        while (newCandidates.size() < populationAmount) {
-            Collections.shuffle(candidates);
-            int minimumValue = candidates.get(0).getChromosomes().get(0).getMinimumValue();
-            int maximumValue = candidates.get(0).getChromosomes().get(0).getMaximumValue();
-            for (int i = 1; i < candidates.size(); i += 2) {
-                if (ThreadLocalRandom.current().nextInt(1, 101) <= probability) {
-                    List<Chromosome> can1Chromosomes = candidates.get(i - 1).getChromosomes();
-                    double x1 = can1Chromosomes.get(0).getValue();
-                    double y1 = can1Chromosomes.get(1).getValue();
-                    List<Chromosome> can2Chromosomes = candidates.get(i).getChromosomes();
-                    double x2 = can2Chromosomes.get(0).getValue();
-                    double y2 = can2Chromosomes.get(1).getValue();
+  @Override
+  public List<Candidate> linearCrossover(List<Candidate> candidates, int populationAmount,
+      int probability, BinaryOperator<Double> function, Mode mode) {
+    List<Candidate> newCandidates = new ArrayList<>();
+    while (newCandidates.size() < populationAmount) {
+      Collections.shuffle(candidates);
+      int minimumValue = candidates.get(0).getChromosomes().get(0).getMinimumValue();
+      int maximumValue = candidates.get(0).getChromosomes().get(0).getMaximumValue();
+      for (int i = 1; i < candidates.size(); i += 2) {
+        if (ThreadLocalRandom.current().nextInt(1, 101) <= probability) {
+          List<Chromosome> can1Chromosomes = candidates.get(i - 1).getChromosomes();
+          double x1 = can1Chromosomes.get(0).getValue();
+          double y1 = can1Chromosomes.get(1).getValue();
+          List<Chromosome> can2Chromosomes = candidates.get(i).getChromosomes();
+          double x2 = can2Chromosomes.get(0).getValue();
+          double y2 = can2Chromosomes.get(1).getValue();
 
+          double newX1 = x1 / 2 + x2 / 2;
+          if (isRangeIncorrect(newX1, minimumValue, maximumValue)) {
+            break;
+          }
 
-                    double newX1 = x1 / 2 + x2 / 2;
-                    if (isRangeInCorrect(newX1, minimumValue, maximumValue))
-                        break;
+          double newY1 = y1 / 2 + y2 / 2;
 
-                    double newY1 = y1 / 2 + y2 / 2;
+          if (isRangeIncorrect(newY1, minimumValue, maximumValue)) {
+            break;
+          }
 
-                    if (isRangeInCorrect(newY1, minimumValue, maximumValue))
-                        break;
+          Candidate z = createNewCandidate(newX1, newY1, minimumValue, maximumValue);
 
+          double newX2 = 3 * x1 / 2 - x2 / 2;
+          if (isRangeIncorrect(newX2, minimumValue, maximumValue)) {
+            break;
+          }
 
-                    Candidate z = createNewCandidate(newX1, newY1, minimumValue, maximumValue);
+          double newY2 = 3 * y1 / 2 + y2 / 2;
 
-                    double newX2 = 3 * x1 / 2 - x2 / 2;
-                    if (isRangeInCorrect(newX2, minimumValue, maximumValue))
-                        break;
+          if (isRangeIncorrect(newY2, minimumValue, maximumValue)) {
+            break;
+          }
 
+          Candidate v = createNewCandidate(newX2, newY2, minimumValue, maximumValue);
 
-                    double newY2 = 3 * y1 / 2 + y2 / 2;
+          double newX3 = 3 * x2 / 2 - x1 / 2;
+          if (isRangeIncorrect(newX3, minimumValue, maximumValue)) {
+            break;
+          }
 
-                    if (isRangeInCorrect(newY2, minimumValue, maximumValue))
-                        break;
+          double newY3 = 3 * y2 / 2 + y1 / 2;
 
+          if (isRangeIncorrect(newY3, minimumValue, maximumValue)) {
+            break;
+          }
 
-                    Candidate v = createNewCandidate(newX2, newY2, minimumValue, maximumValue);
+          Candidate w = createNewCandidate(newX3, newY3, minimumValue, maximumValue);
 
-                    double newX3 = 3 * x2 / 2 - x1 / 2;
-                    if (isRangeInCorrect(newX3, minimumValue, maximumValue))
-                        break;
-
-                    double newY3 = 3 * y2 / 2 + y1 / 2;
-
-                    if (isRangeInCorrect(newY3, minimumValue, maximumValue))
-                        break;
-
-
-                    Candidate w = createNewCandidate(newX3, newY3, minimumValue, maximumValue);
-
-                    newCandidates.addAll(getBestTwo(asList(z, v, w), function, mode));
-                }
-            }
+          newCandidates.addAll(getBestTwo(asList(z, v, w), function, mode));
         }
-        return newCandidates.stream().limit(populationAmount).collect(Collectors.toList());
+      }
     }
+    return newCandidates.stream().limit(populationAmount).collect(Collectors.toList());
+  }
 
-    private boolean isRangeInCorrect(double value, int minimumValue, int maximumValue) {
-        return value < minimumValue || value > maximumValue;
-    }
+  private List<Candidate> getBestTwo(List<Candidate> candidates, BinaryOperator<Double> function,
+      Mode mode) {
+    return switch (mode) {
+      case MINIMIZATION -> getSortedCandidateStream(candidates, function)
+          .limit(2)
+          .collect(Collectors.toList());
+      case MAXIMIZATION -> getSortedCandidateStream(candidates, function)
+          .skip(1)
+          .collect(Collectors.toList());
+    };
+  }
 
-    private List<Candidate> getBestTwo(List<Candidate> candidates, BinaryOperator<Double> function, Mode mode) {
-        return switch (mode) {
-            case MINIMIZATION -> getSortedCandidateStream(candidates, function)
-                    .limit(2)
-                    .collect(Collectors.toList());
-            case MAXIMIZATION -> getSortedCandidateStream(candidates, function)
-                    .skip(1)
-                    .collect(Collectors.toList());
-        };
-    }
+  private static Stream<Candidate> getSortedCandidateStream(List<Candidate> candidates,
+      BinaryOperator<Double> function) {
+    return candidates.stream().sorted(Comparator.comparingDouble(c ->
+        function.apply(c.getChromosomes().get(0).getValue(),
+            c.getChromosomes().get(1).getValue())));
+  }
 
-    private static Stream<Candidate> getSortedCandidateStream(List<Candidate> candidates, BinaryOperator<Double> function) {
-        return candidates.stream().sorted(Comparator.comparingDouble(c ->
-                function.apply(c.getChromosomes().get(0).getValue(), c.getChromosomes().get(1).getValue())));
-    }
+  @Override
+  public List<Candidate> blendCrossoverAlpha(List<Candidate> candidates, int populationAmount,
+      int probability, double alpha) {
+    return blendCrossoverAlphaAndBeta(candidates, populationAmount, probability, alpha, alpha);
+  }
 
-    @Override
-    public List<Candidate> blendCrossoverAlpha(List<Candidate> candidates, int populationAmount, int probability, double alpha) {
-        return blendCrossoverAlphaAndBeta(candidates, populationAmount, probability, alpha, alpha);
-    }
+  @Override
+  public List<Candidate> blendCrossoverAlphaAndBeta(List<Candidate> candidates,
+      int populationAmount, int probability, double alpha, double beta) {
+    List<Candidate> newCandidates = new ArrayList<>();
+    while (newCandidates.size() < populationAmount) {
+      Collections.shuffle(candidates);
+      int minimumValue = candidates.get(0).getChromosomes().get(0).getMinimumValue();
+      int maximumValue = candidates.get(0).getChromosomes().get(0).getMaximumValue();
+      for (int i = 1; i < candidates.size(); i += 2) {
+        if (ThreadLocalRandom.current().nextInt(1, 101) <= probability) {
+          List<Chromosome> can1Chromosomes = candidates.get(i - 1).getChromosomes();
+          double x1 = can1Chromosomes.get(0).getValue();
+          double y1 = can1Chromosomes.get(1).getValue();
+          List<Chromosome> can2Chromosomes = candidates.get(i).getChromosomes();
+          double x2 = can2Chromosomes.get(0).getValue();
+          double y2 = can2Chromosomes.get(1).getValue();
 
-    @Override
-    public List<Candidate> blendCrossoverAlphaAndBeta(List<Candidate> candidates, int populationAmount, int probability, double alpha, double beta) {
-        List<Candidate> newCandidates = new ArrayList<>();
-        while (newCandidates.size() < populationAmount) {
-            Collections.shuffle(candidates);
-            int minimumValue = candidates.get(0).getChromosomes().get(0).getMinimumValue();
-            int maximumValue = candidates.get(0).getChromosomes().get(0).getMaximumValue();
-            for (int i = 1; i < candidates.size(); i += 2) {
-                if (ThreadLocalRandom.current().nextInt(1, 101) <= probability) {
-                    List<Chromosome> can1Chromosomes = candidates.get(i - 1).getChromosomes();
-                    double x1 = can1Chromosomes.get(0).getValue();
-                    double y1 = can1Chromosomes.get(1).getValue();
-                    List<Chromosome> can2Chromosomes = candidates.get(i).getChromosomes();
-                    double x2 = can2Chromosomes.get(0).getValue();
-                    double y2 = can2Chromosomes.get(1).getValue();
+          double newX1 = ThreadLocalRandom.current()
+              .nextDouble(Math.min(x1, x2) - alpha * Math.abs(x1 - x2),
+                  Math.max(x1, x2) + beta * Math.abs(x1 - x2));
+          if (isRangeIncorrect(newX1, minimumValue, maximumValue)) {
+            break;
+          }
 
+          double newY1 = ThreadLocalRandom.current()
+              .nextDouble(Math.min(y1, y2) - alpha * Math.abs(y1 - y2),
+                  Math.max(y1, y2) + beta * Math.abs(y1 - y2));
+          if (isRangeIncorrect(newY1, minimumValue, maximumValue)) {
+            break;
+          }
 
-                    double newX1 = ThreadLocalRandom.current().nextDouble(Math.min(x1, x2) - alpha * Math.abs(x1 - x2), Math.max(x1, x2) + beta * Math.abs(x1 - x2));
-                    if (isRangeInCorrect(newX1, minimumValue, maximumValue))
-                        break;
+          double newX2 = ThreadLocalRandom.current()
+              .nextDouble(Math.min(x1, x2) - alpha * Math.abs(x1 - x2),
+                  Math.max(x1, x2) + beta * Math.abs(x1 - x2));
+          if (isRangeIncorrect(newX2, minimumValue, maximumValue)) {
+            break;
+          }
 
-                    double newY1 = ThreadLocalRandom.current().nextDouble(Math.min(y1, y2) - alpha * Math.abs(y1 - y2), Math.max(y1, y2) + beta * Math.abs(y1 - y2));
-                    if (isRangeInCorrect(newY1, minimumValue, maximumValue))
-                        break;
+          double newY2 = ThreadLocalRandom.current()
+              .nextDouble(Math.min(y1, y2) - alpha * Math.abs(y1 - y2),
+                  Math.max(y1, y2) + beta * Math.abs(y1 - y2));
+          if (isRangeIncorrect(newY2, minimumValue, maximumValue)) {
+            break;
+          }
 
-                    double newX2 = ThreadLocalRandom.current().nextDouble(Math.min(x1, x2) - alpha * Math.abs(x1 - x2), Math.max(x1, x2) + beta * Math.abs(x1 - x2));
-                    if (isRangeInCorrect(newX2, minimumValue, maximumValue))
-                        break;
-
-                    double newY2 = ThreadLocalRandom.current().nextDouble(Math.min(y1, y2) - alpha * Math.abs(y1 - y2), Math.max(y1, y2) + beta * Math.abs(y1 - y2));
-                    if (isRangeInCorrect(newY2, minimumValue, maximumValue))
-                        break;
-
-                    newCandidates.add(createNewCandidate(newX1, newY1, minimumValue, maximumValue));
-                    newCandidates.add(createNewCandidate(newX2, newY2, minimumValue, maximumValue));
-                }
-            }
+          newCandidates.add(createNewCandidate(newX1, newY1, minimumValue, maximumValue));
+          newCandidates.add(createNewCandidate(newX2, newY2, minimumValue, maximumValue));
         }
-        return newCandidates.stream().limit(populationAmount).collect(Collectors.toList());
+      }
     }
+    return newCandidates.stream().limit(populationAmount).collect(Collectors.toList());
+  }
 
-    @Override
-    public List<Candidate> averageCrossover(List<Candidate> candidates, int populationAmount, int probability) {
-        List<Candidate> newCandidates = new ArrayList<>();
-        while (newCandidates.size() < populationAmount) {
-            Collections.shuffle(candidates);
-            int minimumValue = candidates.get(0).getChromosomes().get(0).getMinimumValue();
-            int maximumValue = candidates.get(0).getChromosomes().get(0).getMaximumValue();
-            for (int i = 1; i < candidates.size(); i += 2) {
-                if (ThreadLocalRandom.current().nextInt(1, 101) <= probability) {
-                    List<Chromosome> can1Chromosomes = candidates.get(i - 1).getChromosomes();
-                    double x1 = can1Chromosomes.get(0).getValue();
-                    double y1 = can1Chromosomes.get(1).getValue();
-                    List<Chromosome> can2Chromosomes = candidates.get(i).getChromosomes();
-                    double x2 = can2Chromosomes.get(0).getValue();
-                    double y2 = can2Chromosomes.get(1).getValue();
+  @Override
+  public List<Candidate> averageCrossover(List<Candidate> candidates, int populationAmount,
+      int probability) {
+    List<Candidate> newCandidates = new ArrayList<>();
+    while (newCandidates.size() < populationAmount) {
+      Collections.shuffle(candidates);
+      int minimumValue = candidates.get(0).getChromosomes().get(0).getMinimumValue();
+      int maximumValue = candidates.get(0).getChromosomes().get(0).getMaximumValue();
+      for (int i = 1; i < candidates.size(); i += 2) {
+        if (ThreadLocalRandom.current().nextInt(1, 101) <= probability) {
+          List<Chromosome> can1Chromosomes = candidates.get(i - 1).getChromosomes();
+          double x1 = can1Chromosomes.get(0).getValue();
+          double y1 = can1Chromosomes.get(1).getValue();
+          List<Chromosome> can2Chromosomes = candidates.get(i).getChromosomes();
+          double x2 = can2Chromosomes.get(0).getValue();
+          double y2 = can2Chromosomes.get(1).getValue();
 
-                    double newX = (x1 + x2) / 2;
-                    double newY = (y1 + y2) / 2;
+          double newX = (x1 + x2) / 2;
+          double newY = (y1 + y2) / 2;
 
-                    newCandidates.add(createNewCandidate(newX, newY, minimumValue, maximumValue));
-                }
-            }
+          newCandidates.add(createNewCandidate(newX, newY, minimumValue, maximumValue));
         }
-        return newCandidates.stream().limit(populationAmount).collect(Collectors.toList());
+      }
     }
+    return newCandidates.stream().limit(populationAmount).collect(Collectors.toList());
+  }
 }
