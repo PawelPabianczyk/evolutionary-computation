@@ -137,7 +137,10 @@ public class BasicController {
             ResultsDTO resultsDTO = geneticService.performV2(geneticAlgorithmConfigurationDTO);
             return results(model, resultsDTO);
         } else{
-            return null;
+            geneticAlgorithmConfigurationDTO.setCrossMethodV2("LINEAR_CROSSOVER");
+            geneticAlgorithmConfigurationDTO.setMutationMethodV2("UNIFORM_MUTATION");
+            ResultsDTO resultsDTO = geneticService.performV2(geneticAlgorithmConfigurationDTO);
+            return results(model, resultsDTO);
         }
     }
 
