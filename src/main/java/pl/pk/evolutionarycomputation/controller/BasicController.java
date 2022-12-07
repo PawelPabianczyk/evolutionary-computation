@@ -15,6 +15,9 @@ import pl.pk.evolutionarycomputation.enums.Selection;
 import pl.pk.evolutionarycomputation.enums.Tournament;
 import pl.pk.evolutionarycomputation.service.GeneticService;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
@@ -37,7 +40,8 @@ public class BasicController {
         boolean maximization = false;
         String selectionMethod = null, crossMethod = null, mutationMethodStr = null;
         Mutation mutationMethod = Mutation.ONE_POINT;
-
+        double alpha = 10;
+        double beta = 10;
         if(parts.length == 17) {
             maximization = true;
         }
@@ -80,12 +84,18 @@ public class BasicController {
             spinNumber = Integer.parseInt(tempParts[1]);
 
             tempParts = parts[12].split("=");
-            selectionMethod = tempParts[1];
+            alpha = Double.parseDouble(tempParts[1]);
 
             tempParts = parts[13].split("=");
-            crossMethod = tempParts[1];
+            beta = Double.parseDouble(tempParts[1]);
 
             tempParts = parts[14].split("=");
+            selectionMethod = tempParts[1];
+
+            tempParts = parts[15].split("=");
+            crossMethod = tempParts[1];
+
+            tempParts = parts[16].split("=");
             mutationMethodStr  = tempParts[1];
         }
         else {
@@ -117,9 +127,18 @@ public class BasicController {
 
         Tournament tournament = Tournament.SINGLE;
 
-        GeneticAlgorithmConfigurationDTO geneticAlgorithmConfigurationDTO = new GeneticAlgorithmConfigurationDTO(rangeBegin, rangeEnd, populationAmount, epochsAmount, chromosomeAmount, eliteStrategyAmount, crossProbability, mutationProbability, inversionProbability,selection,crossover,mutation,tournament, maximization, percentageOfBestElements, tournamentSize, spinNumber);
-        ResultsDTO resultsDTO = geneticService.perform(geneticAlgorithmConfigurationDTO);
-        return results(model, resultsDTO);
+        GeneticAlgorithmConfigurationDTO geneticAlgorithmConfigurationDTO = new GeneticAlgorithmConfigurationDTO(rangeBegin, rangeEnd, populationAmount, epochsAmount, chromosomeAmount, eliteStrategyAmount, crossProbability, mutationProbability, inversionProbability,selection,crossover,mutation,tournament, maximization, percentageOfBestElements, tournamentSize, spinNumber, alpha, beta, crossMethod, mutationMethodStr);
+        List<String> methodsV1 = Arrays.asList("ONE_POINT", "TWO_POINT", "UNIFORM", "THREE_POINT");
+        List<String> methodsV2 = Arrays.asList("BLEND_CROSSOVER_ALPHA_BETA", "ARITHMETIC_CROSSOVER", "LINEAR_CROSSOVER", "AVERAGE_CROSSOVER", "BLEND_CROSSOVER_ALPHA", "UNIFORM_MUTATION", "GAUSS_MUTATION");
+        if(methodsV1.contains(crossMethod) && methodsV1.contains(mutationMethodStr)){
+            ResultsDTO resultsDTO = geneticService.perform(geneticAlgorithmConfigurationDTO);
+            return results(model, resultsDTO);
+        }else if(methodsV2.contains(crossMethod) && methodsV2.contains(mutationMethodStr)){
+            ResultsDTO resultsDTO = geneticService.performV2(geneticAlgorithmConfigurationDTO);
+            return results(model, resultsDTO);
+        } else{
+            return null;
+        }
     }
 
 

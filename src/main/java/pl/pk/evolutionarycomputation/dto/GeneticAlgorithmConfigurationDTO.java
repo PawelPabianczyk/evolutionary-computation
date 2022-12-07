@@ -15,10 +15,14 @@ public class GeneticAlgorithmConfigurationDTO {
     private int crossProbability = 60;
     private int mutationProbability = 40;
     private int inversionProbability = 10;
+    private double alpha = 10;
+    private double beta = 10;
     private Selection selectionMethod = Selection.ROULETTE;
     private Crossover crossMethod = Crossover.ONE_POINT;
     private Mutation mutationMethod = Mutation.ONE_POINT;
     private Tournament tournament = Tournament.SINGLE;
+    private String crossMethodV2 = "BLEND_CROSSOVER_ALPHA_BETA";
+    private String mutationMethodV2 = "GAUSS_MUTATION";
     private boolean maximization = true;
 
     private int percentageOfBestElements = 30;
@@ -26,7 +30,7 @@ public class GeneticAlgorithmConfigurationDTO {
     private int spinNumber = 30;
 
 
-    public GeneticAlgorithmConfigurationDTO(int rangeBegin, int rangeEnd, int populationAmount, int epochsAmount, int chromosomeAmount, int eliteStrategyAmount, int crossProbability, int mutationProbability, int inversionProbability, Selection selectionMethod, Crossover crossMethod, Mutation mutationMethod, Tournament tournament, boolean maximization, int percentageOfBestElements, int tournamentSize, int spinNumber) {
+    public GeneticAlgorithmConfigurationDTO(int rangeBegin, int rangeEnd, int populationAmount, int epochsAmount, int chromosomeAmount, int eliteStrategyAmount, int crossProbability, int mutationProbability, int inversionProbability, Selection selectionMethod, Crossover crossMethod, Mutation mutationMethod, Tournament tournament, boolean maximization, int percentageOfBestElements, int tournamentSize, int spinNumber, double alpha, double beta, String crossMethodV2, String mutationMethodV2) {
         this.rangeBegin = rangeBegin;
         this.rangeEnd = rangeEnd;
         this.populationAmount = populationAmount;
@@ -44,6 +48,10 @@ public class GeneticAlgorithmConfigurationDTO {
         this.percentageOfBestElements = percentageOfBestElements;
         this.tournamentSize = tournamentSize;
         this.spinNumber = spinNumber;
+        this.alpha = alpha;
+        this.beta = beta;
+        this.mutationMethodV2 = mutationMethodV2;
+        this.crossMethodV2 = crossMethodV2;
     }
 
     public GeneticAlgorithmConfigurationDTO() {
@@ -116,5 +124,37 @@ public class GeneticAlgorithmConfigurationDTO {
 
     public int getSpinNumber() {
         return spinNumber;
+    }
+
+    public double getAlpha() {
+        return alpha;
+    }
+
+    public void setAlpha(double alpha) {
+        this.alpha = alpha;
+    }
+
+    public double getBeta() {
+        return beta;
+    }
+
+    public void setBeta(double beta) {
+        this.beta = beta;
+    }
+
+    public String getCrossMethodV2() {
+        return crossMethodV2;
+    }
+
+    public void setCrossMethodV2(String crossMethodV2) {
+        this.crossMethodV2 = crossMethodV2;
+    }
+
+    public String getMutationMethodV2() {
+        return mutationMethodV2;
+    }
+
+    public void setMutationMethodV2(String mutationMethodV2) {
+        this.mutationMethodV2 = mutationMethodV2;
     }
 }

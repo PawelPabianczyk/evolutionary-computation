@@ -38,7 +38,36 @@ public enum Crossover {
             swap(a, b, secondPoint, thirdPoint);
         }
     },
+    AVERAGE_CROSSOVER {
+        @Override
+        protected void crossover(byte[] a, byte[] b) {
 
+        }
+    },
+    BLEND_CROSSOVER_ALPHA_BETA{
+        @Override
+        protected void crossover(byte[] a, byte[] b) {
+
+        }
+    },
+    BLEND_CROSSOVER_ALPHA{
+        @Override
+        protected void crossover(byte[] a, byte[] b) {
+
+        }
+    },
+    LINEAR_CROSSOVER{
+        @Override
+        protected void crossover(byte[] a, byte[] b) {
+
+        }
+    },
+    ARITHMETIC_CROSSOVER{
+        @Override
+        protected void crossover(byte[] a, byte[] b) {
+
+        }
+    },
     UNIFORM {
         @Override
         protected void crossover(byte[] a, byte[] b) {
