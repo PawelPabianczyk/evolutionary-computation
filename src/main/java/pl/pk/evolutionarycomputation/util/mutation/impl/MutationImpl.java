@@ -57,7 +57,7 @@ public class MutationImpl implements IMutation {
           do {
             chromosome = canChromosomes.get(j).getValue() + this.random.nextGaussian();
 
-          } while (!Commons.isRangeIncorrect(chromosome, maxValue, maxValue));
+          } while (Commons.isRangeIncorrect(chromosome, minValue, maxValue));
 
           canChromosomes.set(j,
               new Chromosome(chromosome, minValue,

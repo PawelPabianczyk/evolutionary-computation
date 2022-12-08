@@ -147,7 +147,8 @@ public class GeneticServiceImpl implements GeneticService {
 
             functionResults = selection(dto.getSelectionMethod(), functionResults, getMode(dto.isMaximization()), dto.getTournament(), dto.getPercentageOfBestElements(), dto.getTournamentSize(), dto.getSpinNumber());
 
-            candidates = crossoverV2(dto.getCrossMethodV2(), functionResults.stream().map(FunctionResult::getCandidate).collect(Collectors.toList()), getMode(dto.isMaximization()),bealeFunction,  dto.getPopulationAmount(), dto.getCrossProbability(), dto.getAlpha(), dto.getBeta());
+            candidates = crossoverV2(dto.getCrossMethodV2(), functionResults.stream().map(FunctionResult::getCandidate)
+                .collect(Collectors.toList()), getMode(dto.isMaximization()),bealeFunction,  dto.getPopulationAmount(), dto.getCrossProbability(), dto.getAlpha(), dto.getBeta());
 
             candidates = mutationV2(dto.getMutationMethodV2(), candidates, dto.getMutationProbability());
 

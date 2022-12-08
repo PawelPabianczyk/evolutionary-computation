@@ -6,8 +6,8 @@ import pl.pk.evolutionarycomputation.enums.Selection;
 import pl.pk.evolutionarycomputation.enums.Tournament;
 
 public class GeneticAlgorithmConfigurationDTO {
-    private int rangeBegin = -5;
-    private int rangeEnd = 5;
+    private int rangeBegin = -4;
+    private int rangeEnd = 4;
     private int populationAmount = 100;
     private int epochsAmount = 100;
     private int chromosomeAmount = 10;
@@ -15,8 +15,8 @@ public class GeneticAlgorithmConfigurationDTO {
     private int crossProbability = 60;
     private int mutationProbability = 40;
     private int inversionProbability = 10;
-    private double alpha = 10;
-    private double beta = 10;
+    private double alpha = 0.01;
+    private double beta = 0.01;
     private Selection selectionMethod = Selection.ROULETTE;
     private Crossover crossMethod = Crossover.ONE_POINT;
     private Mutation mutationMethod = Mutation.ONE_POINT;

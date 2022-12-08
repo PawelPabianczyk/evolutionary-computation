@@ -60,7 +60,6 @@ public class CrossoverImpl implements ICrossover {
   public List<Candidate> linearCrossover(List<Candidate> candidates, int populationAmount,
       int probability, BinaryOperator<Double> function, Mode mode) {
     List<Candidate> newCandidates = new ArrayList<>();
-    while (newCandidates.size() < populationAmount) {
       Collections.shuffle(candidates);
       int minimumValue = candidates.get(0).getChromosomes().get(0).getMinimumValue();
       int maximumValue = candidates.get(0).getChromosomes().get(0).getMaximumValue();
@@ -115,7 +114,6 @@ public class CrossoverImpl implements ICrossover {
           newCandidates.addAll(getBestTwo(asList(z, v, w), function, mode));
         }
       }
-    }
     return newCandidates.stream().limit(populationAmount).collect(Collectors.toList());
   }
 
@@ -161,36 +159,39 @@ public class CrossoverImpl implements ICrossover {
           double x2 = can2Chromosomes.get(0).getValue();
           double y2 = can2Chromosomes.get(1).getValue();
 
-          double newX1 = ThreadLocalRandom.current()
-              .nextDouble(Math.min(x1, x2) - alpha * Math.abs(x1 - x2),
-                  Math.max(x1, x2) + beta * Math.abs(x1 - x2));
-          if (isRangeIncorrect(newX1, minimumValue, maximumValue)) {
-            break;
-          }
+          try {
+            double newX1 = ThreadLocalRandom.current()
+                .nextDouble(Math.min(x1, x2) - alpha * Math.abs(x1 - x2),
+                    Math.max(x1, x2) + beta * Math.abs(x1 - x2));
+            if (isRangeIncorrect(newX1, minimumValue, maximumValue)) {
+              break;
+            }
 
-          double newY1 = ThreadLocalRandom.current()
-              .nextDouble(Math.min(y1, y2) - alpha * Math.abs(y1 - y2),
-                  Math.max(y1, y2) + beta * Math.abs(y1 - y2));
-          if (isRangeIncorrect(newY1, minimumValue, maximumValue)) {
-            break;
-          }
+            double newY1 = ThreadLocalRandom.current()
+                .nextDouble(Math.min(y1, y2) - alpha * Math.abs(y1 - y2),
+                    Math.max(y1, y2) + beta * Math.abs(y1 - y2));
+            if (isRangeIncorrect(newY1, minimumValue, maximumValue)) {
+              break;
+            }
 
-          double newX2 = ThreadLocalRandom.current()
-              .nextDouble(Math.min(x1, x2) - alpha * Math.abs(x1 - x2),
-                  Math.max(x1, x2) + beta * Math.abs(x1 - x2));
-          if (isRangeIncorrect(newX2, minimumValue, maximumValue)) {
-            break;
-          }
+            double newX2 = ThreadLocalRandom.current()
+                .nextDouble(Math.min(x1, x2) - alpha * Math.abs(x1 - x2),
+                    Math.max(x1, x2) + beta * Math.abs(x1 - x2));
+            if (isRangeIncorrect(newX2, minimumValue, maximumValue)) {
+              break;
+            }
 
-          double newY2 = ThreadLocalRandom.current()
-              .nextDouble(Math.min(y1, y2) - alpha * Math.abs(y1 - y2),
-                  Math.max(y1, y2) + beta * Math.abs(y1 - y2));
-          if (isRangeIncorrect(newY2, minimumValue, maximumValue)) {
-            break;
-          }
+            double newY2 = ThreadLocalRandom.current()
+                .nextDouble(Math.min(y1, y2) - alpha * Math.abs(y1 - y2),
+                    Math.max(y1, y2) + beta * Math.abs(y1 - y2));
+            if (isRangeIncorrect(newY2, minimumValue, maximumValue)) {
+              break;
+            }
 
-          newCandidates.add(createNewCandidate(newX1, newY1, minimumValue, maximumValue));
-          newCandidates.add(createNewCandidate(newX2, newY2, minimumValue, maximumValue));
+            newCandidates.add(createNewCandidate(newX1, newY1, minimumValue, maximumValue));
+            newCandidates.add(createNewCandidate(newX2, newY2, minimumValue, maximumValue));
+          } catch (IllegalArgumentException ignored) {
+          }
         }
       }
     }

@@ -42,7 +42,7 @@ public class BasicController {
         Mutation mutationMethod = Mutation.ONE_POINT;
         double alpha = 10;
         double beta = 10;
-        if(parts.length == 17) {
+        if(parts.length == 19) {
             maximization = true;
         }
 
